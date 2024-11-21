@@ -1,11 +1,15 @@
-import java.util.List;
-
 public class Equality {
-	private static List constantSymboList;
-	private static List functionSymboList;
-	private static List relationSymboList;
+	public String[] signatureOfEquality= {"=", "!="};
+	public static String[] constantSymboList;
+	public static String[] functionSymboList;
+	public static String[] relationSymboList;
 	
-	public Equality(){
-		constantSymboList.add(relationSymboList)
+	/*
+	 * Define class constant, function, relation symbols
+	 */
+	public Equality(String[] cs, String[] fs, String[] rs){
+		this.constantSymboList = cs;
+		this.functionSymboList = fs;
+		this.relationSymboList = rs;
 	}
 }
