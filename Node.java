@@ -4,16 +4,16 @@ public class Node {
 	// Fields
 	private final int id;
 	private final char fn;
-	private final List<Integer> args;
+	private int[] args;
 	private int find; 
 	private int[] ccpar;
 	private int[] forbiddenList;
 
 	// Constructor
-	public Node(int id, char fn, List<Integer> args, int find) {
+	public Node(int id, char fn) {
 		this.id = id;
 		this.fn = fn;
-		this.args = args;
+		this.args = null;
 		this.find = this.id;
 		this.ccpar = null;
 		this.forbiddenList = null;
@@ -28,7 +28,7 @@ public class Node {
 		return fn;
 	}
 
-	public List<Integer> getArgs() {
+	public int[] getArgs() {
 		return args;
 	}
 
@@ -44,6 +44,11 @@ public class Node {
 		return forbiddenList;
 	}
 
+	// Setters
+	public void setArgs(int[] args) {
+		this.args = args;
+	}
+	
 	public void setFind(int find) {
 		this.find = find;
 	}

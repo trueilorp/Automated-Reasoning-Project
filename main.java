@@ -17,20 +17,31 @@ public class Main {
 					String conjunct = handlerFormula.getArrayOfDisjunct(i); // congiunto della mia formula
 					// splittare il congiunto
 					Iterator<Character> iterator = conjunct.chars().mapToObj(c -> (char) c).iterator();
-					String[] charsAlreadyadded = {};
+					char[] charsAlreadyadded = {};
 					int id = 0; // id per il nodo
+					// Create array of nodes
+					Dag dag = new Dag();
 					while (iterator.hasNext()){
 						char symbol = iterator.next();
-						if(!Arrays.asList(charsAlreadyadded).contains(symbol)){ // coontrollo che non sia già stato creato il nodo con questo simbolo
-							Node n = new Node(id, symbol, null, id); /////// args??????????
-							id++;
+						 // controllo che non sia già stato creato il nodo con questo simbolo --> probabilmente non serve
+						if(!(handlerFormula.charsToSkip.contains(symbol))){
+							if(){ // Devo controllare che i simboli (se sono simboli di costante) non vengano aggiunti più volte all'albero?????????
+							// Devo anche distinguere il primo congiunto dagli altri, perchè successivamente non occorre aggiungere le f
+								Node n = new Node(id, symbol); 
+								// charsAlreadyadded[id] = symbol;
+								dag.addNode(n); // add Node to the Dag
+								id++;
+							}
 						}
 					}
-					
+					dag.printDag();
+					System.out.println("####################");					
 				}
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 }

@@ -1,7 +1,11 @@
+import java.util.Arrays;
+import java.util.List;
+
 public class HandlerFormula {
 	
 	public String[] arrayOfDisjuncts;
-	public String[] charsToSkip = {",", "(", ")", " "};
+	public final List<Character> charsToSkip = Arrays.asList(',', '(', ')', ' ');
+	public final List<Character> costantSymbolsAlreadyAdd = Arrays.asList();
 	
 	public HandlerFormula() {
 		arrayOfDisjuncts = null;
