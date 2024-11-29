@@ -32,8 +32,9 @@ public class Dag {
 	}
 
 	public List<Node> mergeDag(List<Node> nodes) {
-		return nodes.stream().flatMap(List::stream).distinct()  // Rimuove nodi duplicati
-		.collect(Collectors.toList());
+		return nodes.stream()
+					.distinct()  // Rimuove nodi duplicati basati su equals() e hashCode()
+					.collect(Collectors.toList());
 	}
 
 	// CongruenceClosure(equations):

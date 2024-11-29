@@ -69,8 +69,10 @@ public class TryArgs {
 			}
 		}
 		Dag defDag = new Dag();
-		defDag.setListOfNodes(defDag.mergeDag(nodes));
+		List<Node> nodesMerge = defDag.mergeDag(nodes);
+		defDag.setListOfNodes(nodesMerge);
 		System.out.println("\nDEF DAG MERGE");
 		defDag.printDag();
+		// Ora devo risettare tutti gli ID_NODE
 	}
 }

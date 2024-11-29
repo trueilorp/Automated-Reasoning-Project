@@ -64,21 +64,17 @@ public class Node {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		// Verifica se l'oggetto è lo stesso
-		if (this == obj) return true;
-
-		// Verifica se l'oggetto è un'istanza della stessa classe
-		if (obj == null || getClass() != obj.getClass()) return false;
-
-		// Confronta i campi significativi (in questo caso 'name')
-		Node node = (Node) obj;
-		return Objects.equals(id, node.id);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Node node = (Node) o;
+		// Due nodi sono uguali se hanno lo stesso id e args
+		return fn == node.fn && Objects.equals(args, node.args);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(fn, args);
 	}
 	
 	@Override
