@@ -11,4 +11,3 @@ if errorlevel 1 (
 rem Esegui il programma Java
 java Main
 
-pause

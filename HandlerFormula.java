@@ -1,10 +1,16 @@
 import java.util.Arrays;
 import java.util.List;
 
+/*
+ * Constant symbols: a,b,c,d
+ * Function symbols: f,g,h
+ */
+
 public class HandlerFormula {
 	
 	public String[] arrayOfDisjuncts;
-	public final List<Character> charsToSkip = Arrays.asList(',', '(', ')', ' ');
+	public final List<Character> charsToSkip = Arrays.asList( ' ', '=', '#'); // # --> diverso !=
+	public final List<Character> charsToHandle = Arrays.asList(',', '(', ')');
 	public final List<Character> costantSymbolsAlreadyAdd = Arrays.asList();
 	
 	public HandlerFormula() {
@@ -12,7 +18,7 @@ public class HandlerFormula {
 	}
 	
 	public void splitFormula(String row){
-		String regex = "[AND]";
+		String regex = "s*ANDs*";
 		arrayOfDisjuncts = row.split(regex);
 	}
 	
