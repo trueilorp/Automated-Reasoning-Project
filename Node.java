@@ -55,12 +55,24 @@ public class Node {
 		this.find = find;
 	}
 
-	public void addCcpar(int ccparToAdd) {
-		this.ccpar.add(ccparToAdd);
+	public void addCcpar(List<Integer> ccparToAdd) {
+		for (int n : ccparToAdd){
+			this.ccpar.add(n);
+		}
 	}
 	
-	public void addForbiddenList(int forbiddenListToAdd) {
-		this.forbiddenList.add(forbiddenListToAdd);
+	public void clearCcpar() {
+		this.ccpar.clear();
+	}
+	
+	public void addForbiddenList(List<Integer> forbiddenListToAdd) {
+		for (int n : forbiddenListToAdd){
+			this.forbiddenList.add(n);	
+		}
+	}
+	
+	public void clearForbiddenList() {
+		this.forbiddenList.clear();	
 	}
 	
 	@Override
@@ -68,7 +80,7 @@ public class Node {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Node node = (Node) o;
-		// Due nodi sono uguali se hanno lo stesso id e args
+		// Due nodi sono uguali se hanno lo stesso fn e args
 		return fn == node.fn && Objects.equals(args, node.args);
 	}
 

@@ -3,8 +3,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.xml.crypto.NodeSetData;
-
 public class Dag {
 	public List<Node> listOfNodes;
 
@@ -58,5 +56,7 @@ public class Dag {
 	// - Restituisce la rappresentante della classe di equivalenza di x
 	// Union(x, y):
 	// - Unisce le classi di equivalenza di x e y (se non già unite)
+	
+	
 
 }
