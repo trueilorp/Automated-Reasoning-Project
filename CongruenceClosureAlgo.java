@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class CongruenceClosureAlgo {
@@ -24,7 +25,7 @@ public class CongruenceClosureAlgo {
 	
 	public List<Integer> ccparCC(int id){
 		Node n =  returnNodeCC(findNodeCC(id));
-		return n.getCcpar();		
+		return n.getCcpar();
 	}
 	
 	public boolean congruenceCC(int id1, int id2){
@@ -46,7 +47,7 @@ public class CongruenceClosureAlgo {
 	public void unionCC(int id1, int id2){
 		Node n1 = returnNodeCC(id1);
 		Node n2 = returnNodeCC(id2);
-		if (n1.getCcpar().size() == n2.getCcpar().size()){
+		if (n1.getCcpar().size() > n2.getCcpar().size()){
 			for (Node n : this.dag.getListOfNodes()){
 				if(n.getFind() == n2.getFind()){
 					n.setFind(n1.getFind());
@@ -71,8 +72,8 @@ public class CongruenceClosureAlgo {
 	
 	public void mergeCC(int id1, int id2){
 		if(findNodeCC(id1) != findNodeCC(id2)){
-			List<Integer> p1 = ccparCC(id1);
-			List<Integer> p2 = ccparCC(id2);
+			List<Integer> p1 = new ArrayList<>(ccparCC(id1));
+			List<Integer> p2 = new ArrayList<>(ccparCC(id2));
 			unionCC(id1, id2);
 			for (int t1 : p1) {
 				for (int t2 : p2) {
@@ -84,3 +85,11 @@ public class CongruenceClosureAlgo {
 		}		
 	}
 }
+
+// Given ΣE-formula
+// F : s1 = t1 ∧ · · · ∧ sm = tm ∧ sm+1 != tm+1 ∧ · · · ∧ sn != tn
+// with subterm set SF , perform the following steps:
+// 1. Construct the initial DAG for the subterm set SF .
+// 2. For i ∈ {1, . . . , m}, merge si ti.
+// 3. If find si = find ti for some i ∈ {m + 1, . . . , n}, return unsatisfiable.
+// 4. Otherwise (if find si != find ti for all i ∈ {m+1, . . ., n}) return satisfiable.
