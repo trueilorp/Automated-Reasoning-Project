@@ -8,37 +8,53 @@ import java.util.List;
  */
 
 public class HandlerFormula {
-	
-	public List<String> arrayOfDisjuncts;
-	public List<String> arrayOfEquality;
-	public final List<Character> charsToSkip = Arrays.asList( ' ', '=', '#'); // # --> diverso !=
+
+	public List<String> arrayOfConjuncts;
+	public List<String> arrayOfEqualities;
+	public List<String> arrayOfDisequalities;
+	public final List<Character> charsToSkip = Arrays.asList(' ', '=', '#'); // # --> diverso !=
 	public final List<Character> charsToHandle = Arrays.asList(',', '(', ')');
 	public final List<Character> costantSymbolsAlreadyAdd = Arrays.asList();
-	
+
 	public HandlerFormula() {
-		arrayOfDisjuncts = new ArrayList<>();
-		arrayOfEquality = new ArrayList<>();
+		arrayOfConjuncts = new ArrayList<>();
+		arrayOfEqualities = new ArrayList<>();
+		arrayOfDisequalities = new ArrayList<>();
 	}
-	
-	public void splitFormula(String row){
-		String regex = "s*ANDs*";
-		String[] parts = row.split(regex); 
-		arrayOfDisjuncts.addAll(Arrays.asList(parts)); 
+
+	public void splitFormula(String row) {
+		String regex = "\\s*AND\\s*";
+		String[] parts = row.split(regex);
+		arrayOfConjuncts.addAll(Arrays.asList(parts));
 	}
-	
-	public String getArrayOfDisjunct(int index){
-		return arrayOfDisjuncts.get(index);
+
+	public String getArrayOfDisjunct(int index) {
+		return arrayOfConjuncts.get(index);
 	}
-	
-	public void splitEqualityEquation(){
-		String regex = "[=#]";
-		for (String conjunct : arrayOfDisjuncts){
+
+	public void splitConjunct() {
+		String regex = "\\s*[=#]\\s*";
+		for (String conjunct : arrayOfConjuncts) {
 			String[] parts = conjunct.split(regex);
-			arrayOfEquality.addAll(Arrays.asList(parts));
+			if (conjunct.contains("=")) {
+				arrayOfEqualities.addAll(Arrays.asList(parts)); 
+			} else if (conjunct.contains("#")) {
+				arrayOfDisequalities.addAll(Arrays.asList(parts)); 
+			}
 		}
 	}
+
+	public void printEqualities() {
+		System.out.println("\nEQUALITY PARTS");
+		for (String eq : arrayOfEqualities) {
+			System.out.println(eq);
+		};
+	}
 	
-	public String getEqualityString(int index){
-		return arrayOfEquality.get(index);
+	public void printDisequalities() {
+		System.out.println("\nDISEQUALITY PARTS");
+		for (String eq : arrayOfDisequalities) {
+			System.out.println(eq);
+		};
 	}
 }

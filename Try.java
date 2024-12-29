@@ -1,9 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Try {
 	public static void main(String[] args) {
@@ -17,7 +14,7 @@ public class Try {
 		node2.addArg(3);
 		node2.addArg(4);
 		node2.addCcpar(Arrays.asList(1));
-		node3.addCcpar(Arrays.asList( 2));
+		node3.addCcpar(Arrays.asList(2));
 		node4.addCcpar(Arrays.asList(1, 2));
 		List<Node> nodesMerge = new ArrayList<>();
 		nodesMerge.add(node1);
@@ -27,24 +24,45 @@ public class Try {
 		defDag.setListOfNodes(nodesMerge);
 		System.out.println("DEF DAG");
 		defDag.printDag();
-		
+
 		// Equality
-		String row = "f(a,b) = a AND f(f(a,b),b) # a";
+		String row = "f(f(f(a))) = a AND f(f(f(f(f(a))))) = a AND f(a) # a";
 		HandlerFormula handlerFormula = new HandlerFormula();
 		handlerFormula.splitFormula(row);
-		handlerFormula.splitEqualityEquation();
-		System.out.println(handlerFormula.getEqualityString(3));
+		handlerFormula.splitConjunct();
 		
-		// Handle the disuguglianze che non servono ora 
-		
+		// Print to check
+		handlerFormula.printEqualities();
+		System.out.println("############");
+		handlerFormula.printDisequalities();
+
 		// Start congruence closure algorithm
 		CongruenceClosureAlgo congruenceClosure = new CongruenceClosureAlgo(defDag);
-		for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size() - 1; j++) {
-			String s1 = handlerFormula.arrayOfDisjuncts.get(j);
-			String s2 = handlerFormula.arrayOfDisjuncts.get(j+1);
+
+		// DECISION PROCEDURE
+		for (int j = 0; j < handlerFormula.arrayOfEqualities.size() - 1; j = j + 2) {
+			String s1 = handlerFormula.arrayOfEqualities.get(j);
+			String s2 = handlerFormula.arrayOfEqualities.get(j + 1);
 			int id1 = s1.charAt(0);
 			int id2 = s2.charAt(0);
 			congruenceClosure.mergeCC(2, 3);
 		}
+		System.out.println("#####################");
+		System.out.println("FINAL DAG:");
+		defDag.printDag();
+
+		System.out.println("#####################");
+		
+		for (int j = 0; j < handlerFormula.arrayOfDisequalities.size() - 1; j++) {
+			String s1 = handlerFormula.arrayOfEqualities.get(j);
+			String s2 = handlerFormula.arrayOfEqualities.get(j + 1);
+			int id1 = s1.charAt(0);
+			int id2 = s2.charAt(0);
+			if (congruenceClosure.findNodeCC(1) == congruenceClosure.findNodeCC(3)){
+				System.out.println("UNSAT");
+				break; // return
+			}
+		}
+		System.out.println("SAT");
 	}
 }

@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) {
-		String path_file = "input.txt"; 
+		String path_file = "input.txt";
 		try (Scanner scanner = new Scanner(new File(path_file))) {
 			// Read every line of the input.txt
 			while (scanner.hasNextLine()) {
@@ -17,7 +17,7 @@ public class Main {
 				HandlerFormula handlerFormula = new HandlerFormula();
 				handlerFormula.splitFormula(row);
 				List<Dag> tempDagList = new ArrayList<>();
-				for (int i = 0; i < handlerFormula.arrayOfDisjuncts.length; i++) {
+				for (int i = 0; i < handlerFormula.arrayOfConjuncts.size(); i++) {
 					String conjunct = handlerFormula.getArrayOfDisjunct(i); // congiunto della mia formula
 					// splittare il congiunto
 					Iterator<Character> iterator = conjunct.chars().mapToObj(c -> (char) c).iterator();
@@ -25,7 +25,8 @@ public class Main {
 					int id = 0; // id per il nodo
 					// Create array of nodes
 					Dag dag = new Dag();
-					int count_open_braket = -1; // initialize at -1 because in theory then i can access to the right node to
+					int count_open_braket = -1; // initialize at -1 because in theory then i can access to the right
+												// node to
 												// insert args
 					int count_close_braket = -1;
 					int count_virgola = 0;
@@ -40,8 +41,10 @@ public class Main {
 								// + 1).getId());
 							} else if (symbol == ')') {
 								count_close_braket++;
-								 // Accedo al nodo della lista dei nodi dell'istanza dag, modifico/aggiungo un argomento alla variabile d'istanza
-								dag.listOfNodes.get(count_open_braket).addArg(dag.listOfNodes.get(count_open_braket + count_virgola + 1).getId());
+								// Accedo al nodo della lista dei nodi dell'istanza dag, modifico/aggiungo un
+								// argomento alla variabile d'istanza
+								dag.listOfNodes.get(count_open_braket)
+										.addArg(dag.listOfNodes.get(count_open_braket + count_virgola + 1).getId());
 								count_open_braket--;
 							} else if (symbol == ',') {
 								count_virgola++;
@@ -84,7 +87,5 @@ public class Main {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		/// Test Dag
 	}
 }
