@@ -1,3 +1,4 @@
+import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,34 +30,32 @@ public class Dag {
 		}
 	}
 
-	public List<Node> mergeDag(List<Node> nodes) {
-		return nodes.stream()
-					.distinct()  // Rimuove nodi duplicati basati su equals() e hashCode()
-					.collect(Collectors.toList());
+	public List<Node> mergeDag(List<Dag> dags) {
+		List<Node> nodesMerge = new ArrayList<>();
+		boolean isNodeToBeAdded = false;
+		for (Dag d1 : dags) {
+			for (Dag d2 : dags) {
+				if (d1 != d2){
+					List<Node> d1Nodes = d1.getListOfNodes();
+					List<Node> d2Nodes = d2.getListOfNodes();
+					for (Node n1 : d1Nodes) {
+						for (Node n2 : d2Nodes) {
+							if(n1.isNodeEqual(n2, d1, d2)){
+								isNodeToBeAdded = false;
+								break;
+							}else{
+								isNodeToBeAdded = true;
+							}
+						}
+						if (isNodeToBeAdded){
+							if (!(nodesMerge.contains(n1))){
+								nodesMerge.add(n1);
+							}
+						}
+					}
+				}
+			}
+		} 
+		return nodesMerge;
 	}
-
-	// CongruenceClosure(equations):
-	// 1. Costruisci il DAG per rappresentare i termini
-	// 2. Inizializza Union-Find:
-	// - Per ogni nodo nel DAG, crea una singola classe di equivalenza
-
-	// 3. Per ogni coppia (s = t) nelle equazioni iniziali:
-	// Union(Find(s), Find(t)) // Unisce le classi di s e t
-
-	// 4. Ripeti fino a convergenza (nessuna nuova unione):
-	// Per ogni nodo f(t1, t2, ..., tn) nel DAG:
-	// Se Find(t1) ≠ Find(t2):
-	// Unisci le classi congruenti (se hanno la stessa struttura):
-	// Union(Find(f(t1)), Find(f(t2)))
-
-	// 5. Restituisci le classi di equivalenza aggiornate
-
-	// Funzioni di supporto:
-	// Find(x):
-	// - Restituisce la rappresentante della classe di equivalenza di x
-	// Union(x, y):
-	// - Unisce le classi di equivalenza di x e y (se non già unite)
-	
-	
-
 }

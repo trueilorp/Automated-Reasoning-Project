@@ -4,8 +4,6 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Main {
 	public static void main(String[] args) {
 		String path_file = "input.txt";
@@ -51,14 +49,14 @@ public class Main {
 							} else { // Create normal node
 										// Handle costant symbol already added
 								if (count_open_braket != -1 && count_virgola == 0) {
-									Node n = new Node(id, symbol);
+									Node n = new Node(id, "" + symbol);
 									// charsAlreadyadded[id] = symbol;
 									dag.addNode(n); // add Node to the Dag
 									dag.listOfNodes.get(count_open_braket)
 											.addArg(dag.listOfNodes.get(count_open_braket + 1).getId());
 									id++;
 								} else {
-									Node n = new Node(id, symbol);
+									Node n = new Node(id, "" + symbol);
 									// charsAlreadyadded[id] = symbol;
 									dag.addNode(n); // add Node to the Dag
 									id++;
@@ -69,16 +67,15 @@ public class Main {
 					// dag.printDag();
 					tempDagList.add(dag);
 				}
-				List<Node> nodes = new ArrayList<>();
 				for (Dag dag : tempDagList) {
 					dag.printDag();
 					System.out.println("####################");
-					for (Node node : dag.getListOfNodes()) {
-						nodes.add(node);
-					}
 				}
+				// For every node in the dag sort the ccpar and args lists
+				
+				// For every Dag, compare the node e merge them
 				Dag defDag = new Dag();
-				List<Node> nodesMerge = defDag.mergeDag(nodes);
+				List<Node> nodesMerge = defDag.mergeDag(tempDagList);
 				defDag.setListOfNodes(nodesMerge);
 				System.out.println("\nDEF DAG MERGE");
 				defDag.printDag();

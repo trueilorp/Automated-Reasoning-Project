@@ -5,10 +5,10 @@ import java.util.List;
 public class Try {
 	public static void main(String[] args) {
 		Dag defDag = new Dag();
-		Node node1 = new Node(1, 'f');
-		Node node2 = new Node(2, 'f');
-		Node node3 = new Node(3, 'a');
-		Node node4 = new Node(4, 'b');
+		Node node1 = new Node(1, "f");
+		Node node2 = new Node(2, "f");
+		Node node3 = new Node(3, "a");
+		Node node4 = new Node(4, "b");
 		node1.addArg(2);
 		node1.addArg(4);
 		node2.addArg(3);

@@ -5,14 +5,14 @@ import java.util.Objects;
 public class Node {
 	// Fields
 	public final int id;
-	public final char fn;
+	public final String fn;
 	public List<Integer> args;
-	public int find; 
+	public int find;
 	public List<Integer> ccpar;
 	public List<Integer> forbiddenList;
 
 	// Constructor
-	public Node(int id, char fn) {
+	public Node(int id, String fn) {
 		this.id = id;
 		this.fn = fn;
 		this.args = new ArrayList<>();
@@ -26,7 +26,7 @@ public class Node {
 		return id;
 	}
 
-	public char getFn() {
+	public String getFn() {
 		return fn;
 	}
 
@@ -37,11 +37,11 @@ public class Node {
 	public int getFind() {
 		return find;
 	}
-	
+
 	public List<Integer> getCcpar() {
 		return ccpar;
 	}
-	
+
 	public List<Integer> getForbiddenList() {
 		return forbiddenList;
 	}
@@ -50,45 +50,96 @@ public class Node {
 	public void addArg(int arg) {
 		this.args.add(arg);
 	}
-	
+
 	public void setFind(int find) {
 		this.find = find;
 	}
 
 	public void addCcpar(List<Integer> ccparToAdd) {
-		for (int n : ccparToAdd){
+		for (int n : ccparToAdd) {
 			this.ccpar.add(n);
 		}
 	}
-	
+
 	public void clearCcpar() {
 		this.ccpar.clear();
 	}
-	
+
 	public void addForbiddenList(List<Integer> forbiddenListToAdd) {
-		for (int n : forbiddenListToAdd){
-			this.forbiddenList.add(n);	
+		for (int n : forbiddenListToAdd) {
+			this.forbiddenList.add(n);
 		}
 	}
-	
+
 	public void clearForbiddenList() {
-		this.forbiddenList.clear();	
+		this.forbiddenList.clear();
 	}
 	
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Node node = (Node) o;
-		// Due nodi sono uguali se hanno lo stesso fn e args
-		return fn == node.fn && Objects.equals(args, node.args);
+	
+	public Node returnNode(Dag dag, int index){
+		for (Node node : dag.getListOfNodes()) {
+			if (node.getId() == index) {
+				return node;
+			}
+		}
+		return null;
 	}
+	
+	public boolean isNodeEqual(Node n2, Dag d1, Dag d2) {
+		boolean result = false;
+		if(this.getFn().equals(n2.getFn())) {
+			if((this.getArgs().size() == n2.getArgs().size())){
+				if(this.getArgs().size() == 0){
+					return true;
+				}
+				for (int i = 0; i < this.getArgs().size(); i++){
+					int arg1 = this.getArgs().get(i);
+					int arg2 = n2.getArgs().get(i);
+					Node node1 = returnNode(d1, arg1);
+					Node node2 = returnNode(d2, arg2);
+					if(node1.getFn().equals(node2.getFn())){
+						result = true;
+					}else{
+						return false;
+					}
+				}
+			}
+		}	
+		return result;	
+	}
+
+	// public boolean equalsWithDag(Object o, Dag dag) {
+	// 	if (this == o) return true;
+	// 	if (o == null || getClass() != o.getClass()) return false;
+	// 	Node node = (Node) o;
+		
+	// 	// Verifica che fn sia uguale
+	// 	if (fn != node.fn) return false;
+		
+	// 	// Verifica che args sia uguale (la lista deve avere la stessa dimensione e gli argomenti devono avere fn uguale)
+	// 	if (args == null) {
+	// 		if (node.args != null) return false; // Se uno è null e l'altro no, non sono uguali
+	// 	} else if (node.args == null || args.size() != node.args.size()) {
+	// 		return false; // Se args ha dimensioni diverse, non sono uguali
+	// 	} else {
+	// 		// Verifica che ogni arg abbia lo stesso fn
+	// 		for (int i = 0; i < args.size(); i++) {
+	// 			String fn1 = returnNode(dag, args.get(i)).getFn();
+	// 			String fn2 = returnNode(dag, node.args.get(i)).getFn(); // this need to refer to the other DAG
+	// 			if (fn1 != fn2) {
+	// 				return false; // Se uno degli argomenti non ha lo stesso fn, non sono uguali
+	// 			}
+	// 		}
+	// 	}
+		
+	// 	return true;
+	// }
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(fn, args);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Node{" +
