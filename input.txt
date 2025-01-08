@@ -1,1 +1,1 @@
-f(a,b) = a AND f(f(a,b),b) # a
+fare(g(x), fare(a,b,c), h(x)) = a AND f(f(a,b),b) # a OR f(f(f(f(f(a))))) = r AND f(f(f(a))) = a AND ratto(y) = x

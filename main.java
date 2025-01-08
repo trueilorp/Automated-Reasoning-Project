@@ -4,83 +4,30 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+
 public class Main {
 	public static void main(String[] args) {
 		String path_file = "input.txt";
 		try (Scanner scanner = new Scanner(new File(path_file))) {
-			// Read every line of the input.txt
+			HandlerFormula handlerFormula = new HandlerFormula();
 			while (scanner.hasNextLine()) {
 				String row = scanner.nextLine();
 				// Read every line of the input.txt
-				HandlerFormula handlerFormula = new HandlerFormula();
-				handlerFormula.splitFormula(row);
-				List<Dag> tempDagList = new ArrayList<>();
-				for (int i = 0; i < handlerFormula.arrayOfConjuncts.size(); i++) {
-					String conjunct = handlerFormula.getArrayOfDisjunct(i); // congiunto della mia formula
-					// splittare il congiunto
-					Iterator<Character> iterator = conjunct.chars().mapToObj(c -> (char) c).iterator();
-					char[] charsAlreadyadded = {};
-					int id = 0; // id per il nodo
-					// Create array of nodes
-					Dag dag = new Dag();
-					int count_open_braket = -1; // initialize at -1 because in theory then i can access to the right
-												// node to
-												// insert args
-					int count_close_braket = -1;
-					int count_virgola = 0;
-					while (iterator.hasNext()) {
-						char symbol = iterator.next();
-						// controllo che non sia già stato creato il nodo con questo simbolo -->
-						// probabilmente non serve
-						if (!(handlerFormula.charsToSkip.contains(symbol))) {
-							if (symbol == '(') {
-								count_open_braket++;
-								// dag.listOFNodes.get(count_open_braket).addArg(dag.listOFNodes.get(count_open_braket
-								// + 1).getId());
-							} else if (symbol == ')') {
-								count_close_braket++;
-								// Accedo al nodo della lista dei nodi dell'istanza dag, modifico/aggiungo un
-								// argomento alla variabile d'istanza
-								dag.listOfNodes.get(count_open_braket)
-										.addArg(dag.listOfNodes.get(count_open_braket + count_virgola + 1).getId());
-								count_open_braket--;
-							} else if (symbol == ',') {
-								count_virgola++;
-							} else { // Create normal node
-										// Handle costant symbol already added
-								if (count_open_braket != -1 && count_virgola == 0) {
-									Node n = new Node(id, "" + symbol);
-									// charsAlreadyadded[id] = symbol;
-									dag.addNode(n); // add Node to the Dag
-									dag.listOfNodes.get(count_open_braket)
-											.addArg(dag.listOfNodes.get(count_open_braket + 1).getId());
-									id++;
-								} else {
-									Node n = new Node(id, "" + symbol);
-									// charsAlreadyadded[id] = symbol;
-									dag.addNode(n); // add Node to the Dag
-									id++;
-								}
-							}
-						}
+				handlerFormula.splitDisjuncts(row);
+				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){
+					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
+					handlerFormula.splitConjuncts(disjunct);
+					for (int i = 0; i < handlerFormula.arrayOfConjuncts.size(); i++) {
+						String conjunct = handlerFormula.getArrayOfConjuncts(i);
+						handlerFormula.createSubtermSet(conjunct);
 					}
-					// dag.printDag();
-					tempDagList.add(dag);
+					Set<String> subtermSet = handlerFormula.getSubtermSet();
+					Dag dag = new Dag();
+					// Create Dag
 				}
-				for (Dag dag : tempDagList) {
-					dag.printDag();
-					System.out.println("####################");
-				}
-				// For every node in the dag sort the ccpar and args lists
-				
-				// For every Dag, compare the node e merge them
-				Dag defDag = new Dag();
-				List<Node> nodesMerge = defDag.mergeDag(tempDagList);
-				defDag.setListOfNodes(nodesMerge);
-				System.out.println("\nDEF DAG MERGE");
-				defDag.printDag();
-				// Ora devo risettare tutti gli ID_NODE
 			}
+			handlerFormula.printSubtermSet();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
