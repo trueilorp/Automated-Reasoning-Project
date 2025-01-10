@@ -4,6 +4,7 @@ import java.util.List;
 public class CongruenceClosureAlgo {
 	
 	public Dag dag;
+	
 	public CongruenceClosureAlgo(Dag dag){
 		this.dag = dag;
 	}
@@ -53,7 +54,7 @@ public class CongruenceClosureAlgo {
 					n.setFind(n1.getFind());
 				}
 			}
-			n1.addCcpar(n2.getCcpar()); 
+			n1.addCcparForCCAlgorithm(n2.getCcpar()); 
 			n1.addForbiddenList(n2.getForbiddenList());
 			n2.clearCcpar();	
 			n2.clearForbiddenList();		  
@@ -63,7 +64,7 @@ public class CongruenceClosureAlgo {
 					n.setFind(n2.getFind());
 				}
 			}
-			n2.addCcpar(n1.getCcpar()); 
+			n2.addCcparForCCAlgorithm(n1.getCcpar()); 
 			n2.addForbiddenList(n1.getForbiddenList());
 			n1.clearCcpar();
 			n1.clearForbiddenList();
@@ -93,3 +94,31 @@ public class CongruenceClosureAlgo {
 // 2. For i ∈ {1, . . . , m}, merge si ti.
 // 3. If find si = find ti for some i ∈ {m + 1, . . . , n}, return unsatisfiable.
 // 4. Otherwise (if find si != find ti for all i ∈ {m+1, . . ., n}) return satisfiable.
+
+// DECISION PROCEDURE
+public void decisionProcedure(){
+	for (int j = 0; j < handlerFormula.arrayOfEqualities.size() - 1; j = j + 2) {
+		String s1 = handlerFormula.arrayOfEqualities.get(j);
+		String s2 = handlerFormula.arrayOfEqualities.get(j + 1);
+		int id1 = s1.charAt(0);
+		int id2 = s2.charAt(0);
+		congruenceClosure.mergeCC(2, 3);
+	}
+	System.out.println("#####################");
+	System.out.println("FINAL DAG:");
+	defDag.printDag();
+
+	System.out.println("#####################");
+
+	for (int j = 0; j < handlerFormula.arrayOfDisequalities.size() - 1; j++) {
+		String s1 = handlerFormula.arrayOfEqualities.get(j);
+		String s2 = handlerFormula.arrayOfEqualities.get(j + 1);
+		int id1 = s1.charAt(0);
+		int id2 = s2.charAt(0);
+		if (congruenceClosure.findNodeCC(1) == congruenceClosure.findNodeCC(3)){
+			System.out.println("UNSAT");
+			break; // return
+		}
+	}
+	System.out.println("SAT");
+}

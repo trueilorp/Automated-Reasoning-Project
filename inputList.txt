@@ -1,0 +1,17 @@
+fare(g(x), fare(aaaaaaaaaaaaaaaaa,b,c), h(x)) = a AND f(f(a,b),b) # a OR f(f(f(f(f(a))))) = r AND f(f(f(a))) = a AND ratto(y) = x
+
+f(f(a,b),b) # a AND f(f(f(f(f(a))))) = r
+
+f(a,b) = a AND f(f(a,b),b) # a
+
+f(f(f(a))) = a AND f(f(f(f(f(a))))) = a AND f(a) # a
+
+f(x,y) = f(y,x) AND f(a,y) # f(y,a)
+
+f(g(x)) = g(f(x)) AND f(g(f(y))) = x AND f(y) = x AND g(f(x)) # x
+
+f(f(f(a))) = f(f(a)) AND f(f(f(f(a)))) = a AND f(a) # a
+
+f(f(f(a))) = f(a) AND f(f(a)) = a AND f(a) # a
+
+f(f(f(a))) = a AND f(f(f(f(f(a))))) = a AND f(a) # a

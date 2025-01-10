@@ -2,23 +2,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Node {
+public class Node implements Cloneable {
 	// Fields
 	public final int id;
-	public final String fn;
+	public String fn;
 	public List<Integer> args;
 	public int find;
 	public List<Integer> ccpar;
 	public List<Integer> forbiddenList;
 
 	// Constructor
-	public Node(int id, String fn) {
+	public Node(int id, String fn){
 		this.id = id;
 		this.fn = fn;
 		this.args = new ArrayList<>();
 		this.find = this.id;
 		this.ccpar = new ArrayList<>();
 		this.forbiddenList = new ArrayList<>();
+	}
+	
+	@Override
+	public Node clone() {
+		try {
+			return (Node) super.clone(); // Calls Object's clone method to create a shallow copy
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	// Getters
@@ -47,6 +57,11 @@ public class Node {
 	}
 
 	// Setters
+	
+	public void setFn(String fn) {
+		this.fn = fn;
+	}
+	
 	public void addArg(int arg) {
 		this.args.add(arg);
 	}
@@ -55,7 +70,11 @@ public class Node {
 		this.find = find;
 	}
 
-	public void addCcpar(List<Integer> ccparToAdd) {
+	public void addCcpar(int ccparToAdd) {
+		this.ccpar.add(ccparToAdd);
+	}
+	
+	public void addCcparForCCAlgorithm(List<Integer> ccparToAdd) {
 		for (int n : ccparToAdd) {
 			this.ccpar.add(n);
 		}

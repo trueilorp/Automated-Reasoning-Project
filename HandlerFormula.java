@@ -2,8 +2,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Comparator;
 
 /*
  * Constant symbols: a,b,c,d
@@ -133,7 +135,23 @@ public class HandlerFormula {
 						sub_subterm += symbol;
 					}
 				}
-			}
-			this.subtermSet.add(sub_subterm);
 		}
+		this.subtermSet.add(sub_subterm);
+	}
+		
+	public void sortSubtermSet() {
+		List<String> subtermSetList = new ArrayList<>(this.subtermSet);
+		subtermSetList.sort(
+			Comparator.comparingInt((String string) -> {
+				int countParenthesis = 0;
+				for (char c : string.toCharArray()) {
+					if (c == '(' || c == ')') {
+						countParenthesis++;
+					}
+				}
+				return countParenthesis;
+			}).thenComparingInt(String::length)
+		);
+		this.subtermSet = new LinkedHashSet<>(subtermSetList);
+	}
 }
