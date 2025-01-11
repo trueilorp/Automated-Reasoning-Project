@@ -96,13 +96,14 @@ public class CongruenceClosureAlgo {
 // 4. Otherwise (if find si != find ti for all i ∈ {m+1, . . ., n}) return satisfiable.
 
 // DECISION PROCEDURE
-public void decisionProcedure(){
-	for (int j = 0; j < handlerFormula.arrayOfEqualities.size() - 1; j = j + 2) {
-		String s1 = handlerFormula.arrayOfEqualities.get(j);
-		String s2 = handlerFormula.arrayOfEqualities.get(j + 1);
+public void decisionProcedure(List<String> arrayOfEqualities){
+	
+	for (int eq = 0; eq < arrayOfEqualities.size() - 1; eq = eq + 2) {
+		String s1 = arrayOfEqualities.get(eq);
+		String s2 = arrayOfEqualities.get(eq + 1);
 		int id1 = s1.charAt(0);
 		int id2 = s2.charAt(0);
-		congruenceClosure.mergeCC(2, 3);
+		this.congruenceClosure.mergeCC(2, 3);
 	}
 	System.out.println("#####################");
 	System.out.println("FINAL DAG:");

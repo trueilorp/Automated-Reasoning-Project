@@ -45,11 +45,11 @@ public class HandlerFormula {
 	
 	public void splitEqDis() {
 		String regex = "\\s*[=#]\\s*";
-		for (String conjunct : arrayOfConjuncts) {
-			String[] parts = conjunct.split(regex);
-			if (conjunct.contains("=")) {
+		for (String disjucnt : this.arrayOfDisjuncts) {
+			String[] parts = disjucnt.split(regex);
+			if (disjucnt.contains("=")) {
 				arrayOfEqualities.addAll(Arrays.asList(parts)); 
-			} else if (conjunct.contains("#")) {
+			} else if (disjucnt.contains("#")) {
 				arrayOfDisequalities.addAll(Arrays.asList(parts)); 
 			}
 		}
@@ -61,6 +61,14 @@ public class HandlerFormula {
 	
 	public String getArrayOfConjuncts(int index) {
 		return arrayOfConjuncts.get(index);
+	}
+	
+	public List<String> getArrayOfEqualities() {
+		return arrayOfEqualities;
+	}
+	
+	public List<String> getArrayOfDisequalities() {
+		return arrayOfDisequalities;
 	}
 	
 	public Set<String> getSubtermSet() {

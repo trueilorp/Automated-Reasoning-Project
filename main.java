@@ -65,17 +65,26 @@ public class Main {
 						}
 					}
 					
+					// Pre process "fn" and let only function names
+					for (Node node : dag.getListOfNodes()) {
+						String fn = node.getFn();
+						String[] fnArray = fn.split("\\(");
+						node.setFn(fnArray[0]);
+					}
+					
 					dag.printDag();
-					break;
+					
+					// Get equality and disequality
+					handlerFormula.splitEqDis();
+					List<String> arrayOfEqualities = handlerFormula.getArrayOfEqualities();
+					List<String> arrayOfDisequalities = handlerFormula.getArrayOfDisequalities();
 					
 					// Start Congruence Closure algorithm
 					CongruenceClosureAlgo congruenceClosure = new CongruenceClosureAlgo(dag);
-					
-					
+					congruenceClosure.decisionProcedure(arrayOfEqualities);
 					
 				}
 			}
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
