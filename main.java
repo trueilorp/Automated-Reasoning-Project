@@ -73,6 +73,12 @@ public class Main {
 						node.setFn(fnArray[0]);
 					}
 					
+					// Sort args and ccpar
+					for (Node node : dag.getListOfNodes()) {
+						node.getArgs().sort(Comparator.naturalOrder());
+						node.getCcpar().sort(Comparator.naturalOrder());
+					}
+					
 					dag.printDag();
 					
 					// Get equality and disequality
@@ -87,7 +93,6 @@ public class Main {
 					System.out.println("FINAL DAG:");
 					dag.printDag();
 					System.out.println("#####################");
-					
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -95,3 +100,7 @@ public class Main {
 		}
 	}
 }
+
+
+//////// TO DO 
+/// //////// VERIFICARE SE E' GIUSTO COME AGGIORNA TUTTI I FIND NELLA UNION, PROBABILMENTE NO PROBLEMI CON F(f(f(f(f(A))))) = ....
