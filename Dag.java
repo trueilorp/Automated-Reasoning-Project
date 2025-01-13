@@ -29,6 +29,15 @@ public class Dag {
 			System.out.println(iterator.next());
 		}
 	}
+	
+	public int findNodeWithFnComplete(String s){
+		for (Node n : this.listOfNodes) {
+			if (n.getFnComplete().contains(s)) {
+				return n.getId();
+			}
+		}
+		return -1;
+	}
 
 	public List<Node> mergeDag(List<Dag> dags) {
 		List<Node> nodesMerge = new ArrayList<>();

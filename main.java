@@ -68,6 +68,7 @@ public class Main {
 					// Pre process "fn" and let only function names
 					for (Node node : dag.getListOfNodes()) {
 						String fn = node.getFn();
+						node.setCompleteFn(fn);
 						String[] fnArray = fn.split("\\(");
 						node.setFn(fnArray[0]);
 					}
@@ -81,7 +82,11 @@ public class Main {
 					
 					// Start Congruence Closure algorithm
 					CongruenceClosureAlgo congruenceClosure = new CongruenceClosureAlgo(dag);
-					congruenceClosure.decisionProcedure(arrayOfEqualities);
+					congruenceClosure.decisionProcedure(arrayOfEqualities, arrayOfDisequalities);
+					System.out.println("#####################");
+					System.out.println("FINAL DAG:");
+					dag.printDag();
+					System.out.println("#####################");
 					
 				}
 			}

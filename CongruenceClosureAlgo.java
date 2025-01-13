@@ -85,7 +85,6 @@ public class CongruenceClosureAlgo {
 			}
 		}		
 	}
-}
 
 // Given ΣE-formula
 // F : s1 = t1 ∧ · · · ∧ sm = tm ∧ sm+1 != tm+1 ∧ · · · ∧ sn != tn
@@ -95,31 +94,30 @@ public class CongruenceClosureAlgo {
 // 3. If find si = find ti for some i ∈ {m + 1, . . . , n}, return unsatisfiable.
 // 4. Otherwise (if find si != find ti for all i ∈ {m+1, . . ., n}) return satisfiable.
 
-// DECISION PROCEDURE
-public void decisionProcedure(List<String> arrayOfEqualities){
-	
-	for (int eq = 0; eq < arrayOfEqualities.size() - 1; eq = eq + 2) {
-		String s1 = arrayOfEqualities.get(eq);
-		String s2 = arrayOfEqualities.get(eq + 1);
-		int id1 = s1.charAt(0);
-		int id2 = s2.charAt(0);
-		this.congruenceClosure.mergeCC(2, 3);
-	}
-	System.out.println("#####################");
-	System.out.println("FINAL DAG:");
-	defDag.printDag();
-
-	System.out.println("#####################");
-
-	for (int j = 0; j < handlerFormula.arrayOfDisequalities.size() - 1; j++) {
-		String s1 = handlerFormula.arrayOfEqualities.get(j);
-		String s2 = handlerFormula.arrayOfEqualities.get(j + 1);
-		int id1 = s1.charAt(0);
-		int id2 = s2.charAt(0);
-		if (congruenceClosure.findNodeCC(1) == congruenceClosure.findNodeCC(3)){
-			System.out.println("UNSAT");
-			break; // return
+	// DECISION PROCEDURE
+	public void decisionProcedure(List<String> arrayOfEqualities, List<String> arrayOfDisequalities){
+		System.out.println("START CONGRUENCE CLOSURE ALGORITHM...");
+		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {
+			String c = arrayOfEqualities.get(eq);
+			String c1 = c.split("\\s*=\\s*")[0];
+			String c2 = c.split("\\s*=\\s*")[1];
+			int id1 = this.dag.findNodeWithFnComplete(c1);
+			int id2 = this.dag.findNodeWithFnComplete(c2);
+			this.mergeCC(id1, id2);
 		}
+		
+		System.out.println("CHECK FINDS TO SAT UNSAT...");
+		for (int dis = 0; dis < arrayOfDisequalities.size(); dis++) {
+			String dc = arrayOfDisequalities.get(dis);
+			String dc1 = dc.split("\\s*#\\s*")[0];
+			String dc2 = dc.split("\\s*#\\s*")[1];
+			int id1 = this.dag.findNodeWithFnComplete(dc1);
+			int id2 = this.dag.findNodeWithFnComplete(dc2);
+			if (this.findNodeCC(id1) == this.findNodeCC(id2)){
+				System.out.println("UNSAT");
+				break; // return
+			}
+		}
+		System.out.println("SAT");
 	}
-	System.out.println("SAT");
 }

@@ -6,6 +6,7 @@ public class Node implements Cloneable {
 	// Fields
 	public final int id;
 	public String fn;
+	public String fnComplete;
 	public List<Integer> args;
 	public int find;
 	public List<Integer> ccpar;
@@ -39,6 +40,10 @@ public class Node implements Cloneable {
 	public String getFn() {
 		return fn;
 	}
+	
+	public String getFnComplete() {
+		return fnComplete;
+	}
 
 	public List<Integer> getArgs() {
 		return args;
@@ -60,6 +65,10 @@ public class Node implements Cloneable {
 	
 	public void setFn(String fn) {
 		this.fn = fn;
+	}
+	
+	public void setCompleteFn(String fnComplete) {
+		this.fnComplete = fnComplete;
 	}
 	
 	public void addArg(int arg) {
