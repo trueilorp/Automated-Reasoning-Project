@@ -18,15 +18,21 @@ public class Main {
 				handlerFormula.splitDisjuncts(row);
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // itero sui disgunti
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
+					
+					// Pre-processing for theory of non-empty possible cyclic lists
+					NonEmptyPossibleCyclicLists nonEmptyPossibleCyclicLists = new NonEmptyPossibleCyclicLists();
+					disjunct = nonEmptyPossibleCyclicLists.preProcessAtom(disjunct);
+					
 					handlerFormula.splitConjuncts(disjunct);
 					for (int i = 0; i < handlerFormula.arrayOfConjuncts.size(); i++) { // itero sui congiunti
 						String conjunct = handlerFormula.getArrayOfConjuncts(i);
 						handlerFormula.createSubtermSet(conjunct);
-					}					
+					}
+					
 					// Ordino il subterm set in base alla lunghezza delle stringhe e lo assegno al variabile d'istanza subtermSet
 					handlerFormula.sortSubtermSet();
 					// handlerFormula.printSubtermSet(); 
-					
+			
 					Set<String> subtermSet = handlerFormula.getSubtermSet();
 					
 					// Create Dag
@@ -73,12 +79,6 @@ public class Main {
 						node.setFn(fnArray[0]);
 					}
 					
-					// Sort args and ccpar
-					for (Node node : dag.getListOfNodes()) {
-						node.getArgs().sort(Comparator.naturalOrder());
-						node.getCcpar().sort(Comparator.naturalOrder());
-					}
-					
 					dag.printDag();
 					
 					// Get equality and disequality
@@ -102,5 +102,5 @@ public class Main {
 }
 
 
-//////// TO DO 
-/// //////// VERIFICARE SE E' GIUSTO COME AGGIORNA TUTTI I FIND NELLA UNION, PROBABILMENTE NO PROBLEMI CON F(f(f(f(f(A))))) = ....
+// TO DO 
+// VERIFICARE SE E' GIUSTO COME AGGIORNA TUTTI I FIND NELLA UNION, PROBABILMENTE NO PROBLEMI CON F(f(f(f(f(A))))) = ....

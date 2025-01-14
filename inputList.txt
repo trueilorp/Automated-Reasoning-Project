@@ -15,3 +15,5 @@ f(f(f(a))) = f(f(a)) AND f(f(f(f(a)))) = a AND f(a) # a
 f(f(f(a))) = f(a) AND f(f(a)) = a AND f(a) # a
 
 f(f(f(a))) = a AND f(f(f(f(f(a))))) = a AND f(a) # a
+
+car(a) = car(b) AND cdr(a) = cdr(b) AND !(atom(a)) AND !(atom(b))
