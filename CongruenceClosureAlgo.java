@@ -108,6 +108,11 @@ public class CongruenceClosureAlgo {
 
 	// DECISION PROCEDURE
 	public void decisionProcedure(List<String> arrayOfEqualities, List<String> arrayOfDisequalities){
+
+		// Process DAG for non-empty possibly cyclic lists
+		NonEmptyPossibleCyclicList nonEmptyPossibleCyclicList = new NonEmptyPossibleCyclicList();
+		this.dag = nonEmptyPossibleCyclicList.processCyclicList(this.dag);
+		
 		System.out.println("START CONGRUENCE CLOSURE ALGORITHM...");
 		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {
 			String c = arrayOfEqualities.get(eq);

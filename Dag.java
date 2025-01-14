@@ -10,7 +10,17 @@ public class Dag {
 	public Dag() {
 		this.listOfNodes = new ArrayList<>();
 	}
-
+	
+	@Override
+	public Dag clone() {
+		try {
+			return (Dag) super.clone(); // Calls Object's clone method to create a shallow copy
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public List<Node> getListOfNodes() {
 		return this.listOfNodes;
 	}

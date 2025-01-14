@@ -20,8 +20,8 @@ public class Main {
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
 					
 					// Pre-processing for theory of non-empty possible cyclic lists
-					NonEmptyPossibleCyclicLists nonEmptyPossibleCyclicLists = new NonEmptyPossibleCyclicLists();
-					disjunct = nonEmptyPossibleCyclicLists.preProcessAtom(disjunct);
+					utilitiesForTheories utilities = new utilitiesForTheories();
+					disjunct = utilities.preProcessAtom(disjunct);
 					
 					handlerFormula.splitConjuncts(disjunct);
 					for (int i = 0; i < handlerFormula.arrayOfConjuncts.size(); i++) { // itero sui congiunti

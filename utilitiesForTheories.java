@@ -1,15 +1,9 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class NonEmptyPossibleCyclicLists{
+public class utilitiesForTheories{
 	
-	public String[] signatureOfNonEmptyPossibleCyclicLists = {"cons", "car", "cdr", "atom"};
-	
-	public NonEmptyPossibleCyclicLists(){
-		
-	}
-	
-	public String preProcessAtom(String formula){
+	public static String preProcessAtom(String formula){
 		String regex = "\\s*(AND)\\s*";
 		String[] parts = formula.split(regex);
 		String newConjuncts = "";
