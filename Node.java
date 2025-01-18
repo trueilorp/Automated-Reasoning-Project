@@ -1,6 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class Node implements Cloneable {
 	// Fields
@@ -9,7 +12,7 @@ public class Node implements Cloneable {
 	public String fnComplete;
 	public List<Integer> args;
 	public int find;
-	public List<Integer> ccpar;
+	public Set<Integer> ccpar;
 	public List<Integer> forbiddenList;
 
 	// Constructor
@@ -18,7 +21,7 @@ public class Node implements Cloneable {
 		this.fn = fn;
 		this.args = new ArrayList<>();
 		this.find = this.id;
-		this.ccpar = new ArrayList<>();
+		this.ccpar = new LinkedHashSet<>();
 		this.forbiddenList = new ArrayList<>();
 	}
 	
@@ -53,7 +56,7 @@ public class Node implements Cloneable {
 		return find;
 	}
 
-	public List<Integer> getCcpar() {
+	public Set<Integer> getCcpar() {
 		return ccpar;
 	}
 
@@ -83,7 +86,7 @@ public class Node implements Cloneable {
 		this.ccpar.add(ccparToAdd);
 	}
 	
-	public void addCcparForCCAlgorithm(List<Integer> ccparToAdd) {
+	public void addCcparForCCAlgorithm(Set<Integer> ccparToAdd) {
 		for (int n : ccparToAdd) {
 			this.ccpar.add(n);
 		}

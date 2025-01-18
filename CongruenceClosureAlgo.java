@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CongruenceClosureAlgo {
 	
@@ -24,7 +26,7 @@ public class CongruenceClosureAlgo {
 		return n.getFind();
 	}
 	
-	public List<Integer> ccparCC(int id){
+	public Set<Integer> ccparCC(int id){
 		Node n =  returnNodeCC(findNodeCC(id));
 		return n.getCcpar();
 	}
@@ -83,8 +85,8 @@ public class CongruenceClosureAlgo {
 	
 	public void mergeCC(int id1, int id2){
 		if(findNodeCC(id1) != findNodeCC(id2)){
-			List<Integer> p1 = new ArrayList<>(ccparCC(id1));
-			List<Integer> p2 = new ArrayList<>(ccparCC(id2));
+			Set<Integer> p1 = new LinkedHashSet<>(ccparCC(id1));
+			Set<Integer> p2 = new LinkedHashSet<>(ccparCC(id2));
 			unionCC(id1, id2);
 			System.out.println("CURRENT DAG: ");
 			this.dag.printDag();
@@ -98,20 +100,15 @@ public class CongruenceClosureAlgo {
 		}		
 	}
 
-// Given ΣE-formula
-// F : s1 = t1 ∧ · · · ∧ sm = tm ∧ sm+1 != tm+1 ∧ · · · ∧ sn != tn
-// with subterm set SF , perform the following steps:
-// 1. Construct the initial DAG for the subterm set SF .
-// 2. For i ∈ {1, . . . , m}, merge si ti.
-// 3. If find si = find ti for some i ∈ {m + 1, . . . , n}, return unsatisfiable.
-// 4. Otherwise (if find si != find ti for all i ∈ {m+1, . . ., n}) return satisfiable.
-
 	// DECISION PROCEDURE
 	public void decisionProcedure(List<String> arrayOfEqualities, List<String> arrayOfDisequalities){
 
 		// Process DAG for non-empty possibly cyclic lists
 		NonEmptyPossibleCyclicList nonEmptyPossibleCyclicList = new NonEmptyPossibleCyclicList();
 		this.dag = nonEmptyPossibleCyclicList.processCyclicList(this.dag);
+		
+		System.out.println("\n#############\nDAG AFTER PREPROCESS CYCLIC LIST:");
+		this.dag.printDag();
 		
 		System.out.println("START CONGRUENCE CLOSURE ALGORITHM...");
 		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {

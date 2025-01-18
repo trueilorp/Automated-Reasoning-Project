@@ -1,1 +1,1 @@
-car(a) = car(b) AND cdr(a) = cdr(b) AND !(atom(a)) AND !(atom(b))
+car(x) = car(y) AND cdr(x) = cdr(y) AND !(atom(x)) AND !(atom(y)) AND f(x) # f(y)
