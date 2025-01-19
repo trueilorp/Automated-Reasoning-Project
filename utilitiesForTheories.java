@@ -17,11 +17,11 @@ public class utilitiesForTheories{
 			
 			if (part.contains("!(atom")) {
 				String arg = part.substring(7, part.length() - 2);
-				newConjunct = "cons(" + u + "," + v + ") = " + arg;
+				newConjunct = arg + " = cons(" + u + "," + v + ")";
 				counter++; // Incrementa il contatore per le prossime variabili
 			} else if (part.contains("atom")) {
 				String arg = part.substring(7, part.length() - 2);
-				newConjunct = "cons(" + u + "," + v + ") # " + arg;
+				newConjunct = arg + " = cons(" + u + "," + v + ") # ";
 				counter++; // Incrementa il contatore per le prossime variabili
 			} else {
 				newConjunct = part;

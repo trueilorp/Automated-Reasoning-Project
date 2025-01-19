@@ -60,10 +60,13 @@ public class CongruenceClosureAlgo {
 	public void unionCC(int id1, int id2){
 		Node n1 = returnNodeCC(id1);
 		Node n2 = returnNodeCC(id2);
+		Set<Node> NodesTempToUpdateFind = new LinkedHashSet<>(); // Creo un set di nodes temporaneo per aggiornare i FIND, perchè altrimenti non riesce ad aggiornarli tutti contemporaneamente in maniera corretta
 		if (n1.getCcpar().size() > n2.getCcpar().size()){
 			for (Node n : this.dag.getListOfNodes()){
 				if(n.getFind() == n2.getFind()){
-					n.setFind(n1.getFind());
+					Node nodeTempToUpdateFind = n.clone();
+					nodeTempToUpdateFind.setFind(n1.getFind());
+					NodesTempToUpdateFind.add(nodeTempToUpdateFind);
 				}
 			}
 			n1.addCcparForCCAlgorithm(n2.getCcpar()); 
@@ -73,13 +76,23 @@ public class CongruenceClosureAlgo {
 		}else{
 			for (Node n : this.dag.getListOfNodes()){
 				if(n.getFind() == n1.getFind()){
-					n.setFind(n2.getFind());
+					Node nodeTempToUpdateFind = n.clone();
+					nodeTempToUpdateFind.setFind(n2.getFind());
+					NodesTempToUpdateFind.add(nodeTempToUpdateFind);
 				}
 			}
 			n2.addCcparForCCAlgorithm(n1.getCcpar()); 
 			n2.addForbiddenList(n1.getForbiddenList());
 			n1.clearCcpar();
 			n1.clearForbiddenList();
+		}
+		
+		for (Node n : NodesTempToUpdateFind){
+			for (Node node : this.dag.getListOfNodes()){
+				if(n.getId() == node.getId()){
+					node.setFind(n.getFind());
+				}
+			}
 		}
 	}
 	
@@ -88,7 +101,7 @@ public class CongruenceClosureAlgo {
 			Set<Integer> p1 = new LinkedHashSet<>(ccparCC(id1));
 			Set<Integer> p2 = new LinkedHashSet<>(ccparCC(id2));
 			unionCC(id1, id2);
-			System.out.println("CURRENT DAG: ");
+			System.out.println("###############\nCURRENT DAG: ");
 			this.dag.printDag();
 			for (int t1 : p1) {
 				for (int t2 : p2) {
@@ -110,8 +123,9 @@ public class CongruenceClosureAlgo {
 		System.out.println("\n#############\nDAG AFTER PREPROCESS CYCLIC LIST:");
 		this.dag.printDag();
 		
-		System.out.println("START CONGRUENCE CLOSURE ALGORITHM...");
+		System.out.println("START CONGRUENCE CLOSURE ALGORITHM...\n");
 		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {
+			System.out.println("\n###########\nEQUALITY NUMBER:" + (eq + 1));
 			String c = arrayOfEqualities.get(eq);
 			String c1 = c.split("\\s*=\\s*")[0];
 			String c2 = c.split("\\s*=\\s*")[1];
@@ -133,6 +147,12 @@ public class CongruenceClosureAlgo {
 				break; // return
 			}else{
 				finalResult = true;
+			}
+			
+			// Controlla se FIND(v) == FIND(ui) e v.fn == "cons"
+			if (this.findNodeCC(id1) == this.findNodeCC(id2) && this.returnNodeCC(id2).getFn().equals("cons")) {
+				finalResult = false;
+				break;
 			}
 		}
 		System.out.println("\n\n#############");

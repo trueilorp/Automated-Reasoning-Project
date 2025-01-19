@@ -22,6 +22,7 @@ public class Main {
 					// Pre-processing for theory of non-empty possible cyclic lists
 					utilitiesForTheories utilities = new utilitiesForTheories();
 					disjunct = utilities.preProcessAtom(disjunct);
+					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
 					handlerFormula.splitConjuncts(disjunct);
 					for (int i = 0; i < handlerFormula.arrayOfConjuncts.size(); i++) { // itero sui congiunti
