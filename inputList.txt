@@ -17,3 +17,5 @@ f(f(f(a))) = f(a) AND f(f(a)) = a AND f(a) # a
 car(a) = car(b) AND cdr(a) = cdr(b) AND !(atom(a)) AND !(atom(b))
 
 car(x) = car(y) AND cdr(x) = cdr(y) AND !(atom(x)) AND !(atom(y)) AND f(x) # f(y)
+
+select(a,i) = v AND select(b,j) = m AND f(a) = f(b) AND x # y

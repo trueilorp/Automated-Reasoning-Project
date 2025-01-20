@@ -19,8 +19,12 @@ public class Main {
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // itero sui disgunti
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
 					
-					// Pre-processing for theory of non-empty possible cyclic lists
+					// Pre-processing for theory of array without estensionality
 					utilitiesForTheories utilities = new utilitiesForTheories();
+					disjunct = utilities.preProcessStore(disjunct);
+					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
+					
+					// Pre-processing for theory of non-empty possible cyclic lists
 					disjunct = utilities.preProcessAtom(disjunct);
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					

@@ -1,1 +1,1 @@
-f(f(f(a))) = a AND f(f(f(f(f(a))))) = a AND f(a) # a
+select(a,i) = v AND select(b,j) = m AND f(a) = f(b) AND x # y

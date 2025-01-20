@@ -13,7 +13,7 @@ public class Node implements Cloneable {
 	public List<Integer> args;
 	public int find;
 	public Set<Integer> ccpar;
-	public List<Integer> forbiddenList;
+	public Set<Integer> forbiddenList;
 
 	// Constructor
 	public Node(int id, String fn){
@@ -22,7 +22,7 @@ public class Node implements Cloneable {
 		this.args = new ArrayList<>();
 		this.find = this.id;
 		this.ccpar = new LinkedHashSet<>();
-		this.forbiddenList = new ArrayList<>();
+		this.forbiddenList = new LinkedHashSet<>();
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class Node implements Cloneable {
 		return ccpar;
 	}
 
-	public List<Integer> getForbiddenList() {
+	public Set<Integer> getForbiddenList() {
 		return forbiddenList;
 	}
 
@@ -96,7 +96,7 @@ public class Node implements Cloneable {
 		this.ccpar.clear();
 	}
 
-	public void addForbiddenList(List<Integer> forbiddenListToAdd) {
+	public void addForbiddenList(Set<Integer> forbiddenListToAdd) {
 		for (int n : forbiddenListToAdd) {
 			this.forbiddenList.add(n);
 		}

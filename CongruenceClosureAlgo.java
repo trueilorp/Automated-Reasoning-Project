@@ -67,6 +67,8 @@ public class CongruenceClosureAlgo {
 					Node nodeTempToUpdateFind = n.clone();
 					nodeTempToUpdateFind.setFind(n1.getFind());
 					NodesTempToUpdateFind.add(nodeTempToUpdateFind);
+					n1.addCcparForCCAlgorithm(n.getCcpar());
+					n.clearCcpar();
 				}
 			}
 			n1.addCcparForCCAlgorithm(n2.getCcpar()); 
@@ -79,6 +81,8 @@ public class CongruenceClosureAlgo {
 					Node nodeTempToUpdateFind = n.clone();
 					nodeTempToUpdateFind.setFind(n2.getFind());
 					NodesTempToUpdateFind.add(nodeTempToUpdateFind);
+					n2.addCcparForCCAlgorithm(n.getCcpar());
+					n.clearCcpar();
 				}
 			}
 			n2.addCcparForCCAlgorithm(n1.getCcpar()); 
@@ -91,6 +95,7 @@ public class CongruenceClosureAlgo {
 			for (Node node : this.dag.getListOfNodes()){
 				if(n.getId() == node.getId()){
 					node.setFind(n.getFind());
+					// node.addCcparForCCAlgorithm(n.getCcpar());
 				}
 			}
 		}
