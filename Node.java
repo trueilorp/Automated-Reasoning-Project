@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -95,8 +94,12 @@ public class Node implements Cloneable {
 	public void clearCcpar() {
 		this.ccpar.clear();
 	}
+	
+	public void addForbiddenList(int nodeId) {
+		this.forbiddenList.add(nodeId);
+	}
 
-	public void addForbiddenList(Set<Integer> forbiddenListToAdd) {
+	public void addForbiddenListCC(Set<Integer> forbiddenListToAdd) {
 		for (int n : forbiddenListToAdd) {
 			this.forbiddenList.add(n);
 		}

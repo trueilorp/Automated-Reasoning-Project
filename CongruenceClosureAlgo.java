@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,11 +67,13 @@ public class CongruenceClosureAlgo {
 					nodeTempToUpdateFind.setFind(n1.getFind());
 					NodesTempToUpdateFind.add(nodeTempToUpdateFind);
 					n1.addCcparForCCAlgorithm(n.getCcpar());
+					n1.addForbiddenListCC(n.getForbiddenList());
 					n.clearCcpar();
+					n.clearForbiddenList();
 				}
 			}
 			n1.addCcparForCCAlgorithm(n2.getCcpar()); 
-			n1.addForbiddenList(n2.getForbiddenList());
+			n1.addForbiddenListCC(n2.getForbiddenList());
 			n2.clearCcpar();	
 			n2.clearForbiddenList();		  
 		}else{
@@ -82,11 +83,13 @@ public class CongruenceClosureAlgo {
 					nodeTempToUpdateFind.setFind(n2.getFind());
 					NodesTempToUpdateFind.add(nodeTempToUpdateFind);
 					n2.addCcparForCCAlgorithm(n.getCcpar());
+					n2.addForbiddenListCC(n.getForbiddenList());
 					n.clearCcpar();
+					n.clearForbiddenList();
 				}
 			}
 			n2.addCcparForCCAlgorithm(n1.getCcpar()); 
-			n2.addForbiddenList(n1.getForbiddenList());
+			n2.addForbiddenListCC(n1.getForbiddenList());
 			n1.clearCcpar();
 			n1.clearForbiddenList();
 		}
@@ -101,7 +104,11 @@ public class CongruenceClosureAlgo {
 		}
 	}
 	
-	public void mergeCC(int id1, int id2){
+	public boolean mergeCC(int id1, int id2){
+		if(returnNodeCC(id1).getForbiddenList().contains(id2) || returnNodeCC(id2).getForbiddenList().contains(id1)){
+			System.out.println("UNSATTTTTTTTTTTTTTTTTTTTTT");
+			return true;
+		}
 		if(findNodeCC(id1) != findNodeCC(id2)){
 			Set<Integer> p1 = new LinkedHashSet<>(ccparCC(id1));
 			Set<Integer> p2 = new LinkedHashSet<>(ccparCC(id2));
@@ -115,7 +122,8 @@ public class CongruenceClosureAlgo {
 					}
 				}
 			}
-		}		
+		}
+		return false;
 	}
 
 	// DECISION PROCEDURE
@@ -128,6 +136,7 @@ public class CongruenceClosureAlgo {
 		System.out.println("\n#############\nDAG AFTER PREPROCESS CYCLIC LIST:");
 		this.dag.printDag();
 		
+		boolean forbiddListCheck = false;		
 		System.out.println("START CONGRUENCE CLOSURE ALGORITHM...\n");
 		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {
 			System.out.println("\n###########\nEQUALITY NUMBER:" + (eq + 1));
@@ -136,7 +145,15 @@ public class CongruenceClosureAlgo {
 			String c2 = c.split("\\s*=\\s*")[1];
 			int id1 = this.dag.findNodeWithFnComplete(c1);
 			int id2 = this.dag.findNodeWithFnComplete(c2);
-			this.mergeCC(id1, id2);
+			forbiddListCheck = this.mergeCC(id1, id2);
+			if (forbiddListCheck == true){
+				break;
+			}
+		}
+		
+		if(forbiddListCheck == true){
+			System.out.println("UNSAT");
+			return;
 		}
 		
 		System.out.println("CHECK FINDS TO SAT UNSAT...");

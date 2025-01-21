@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Main {
 	public static void main(String[] args) {
@@ -13,8 +15,11 @@ public class Main {
 		try (Scanner scanner = new Scanner(new File(path_file))) {
 			HandlerFormula handlerFormula = new HandlerFormula();
 			while (scanner.hasNextLine()) {
-				String row = scanner.nextLine();
 				// Read every line of the input.txt
+				String row = scanner.nextLine();
+				if (row.isEmpty()) {
+					continue;
+				}
 				handlerFormula.splitDisjuncts(row);
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // itero sui disgunti
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
@@ -84,12 +89,17 @@ public class Main {
 						node.setFn(fnArray[0]);
 					}
 					
-					dag.printDag();
-					
 					// Get equality and disequality
 					handlerFormula.splitEqDis();
 					List<String> arrayOfEqualities = handlerFormula.getArrayOfEqualities();
 					List<String> arrayOfDisequalities = handlerFormula.getArrayOfDisequalities();
+					
+					// Set forbidden list based on disequalities
+					for (String disequality : arrayOfDisequalities) {
+						utilitiesForTheories.initializeForbiddenLists(disequality, dag);
+					}
+					
+					dag.printDag();
 					
 					// Start Congruence Closure algorithm
 					CongruenceClosureAlgo congruenceClosure = new CongruenceClosureAlgo(dag);

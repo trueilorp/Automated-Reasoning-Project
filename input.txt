@@ -1,1 +1,2 @@
-select(a,i) = v AND select(b,j) = m AND f(a) = f(b) AND x # y
+
+select(store(store(a,i1,v1),i2,v2),j) = f(x,y) AND select(b,j) = m AND f(a) = f(b) AND x # y
