@@ -2,6 +2,8 @@ fare(g(x), fare(aaaaaaaaaaaaaaaaa,b,c), h(x)) = a AND f(f(a,b),b) # a OR f(f(f(f
 
 f(f(a,b),b) # a AND f(f(f(f(f(a))))) = r
 
+f(f(f(a))) = a AND g(x) AND f(a) # a
+
 f(a,b) = a AND f(f(a,b),b) # a
 
 f(f(f(a))) = a AND f(f(f(f(f(a))))) = a AND f(a) # a
@@ -21,3 +23,5 @@ car(x) = car(y) AND cdr(x) = cdr(y) AND !(atom(x)) AND !(atom(y)) AND f(x) # f(y
 select(a,i) = v AND select(b,j) = m AND f(a) = f(b) AND x # y
 
 select(store(store(a,i1,v1),i2,v2),j) = f(x,y) AND select(b,j) = m AND f(a) = f(b) AND x # y
+
+f(g(x)) = FORALL(X)((g(f(x)))) AND EXISTS(Y)(f(g(f(y)))) = x AND f(y) = x AND g(f(x)) # x

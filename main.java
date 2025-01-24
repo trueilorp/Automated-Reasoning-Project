@@ -24,6 +24,14 @@ public class Main {
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // itero sui disgunti
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
 					
+					// Pe-processing predicate free predicate symbol
+					disjunct = handlerFormula.preProcessPredicate(disjunct);
+					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
+					
+					// Pre-processing for quantifiers
+					disjunct = handlerFormula.preProcessQuantifier(disjunct);
+					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
+					
 					// Pre-processing for theory of array without estensionality
 					utilitiesForTheories utilities = new utilitiesForTheories();
 					disjunct = utilities.preProcessStore(disjunct);

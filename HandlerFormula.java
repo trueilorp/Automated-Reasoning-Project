@@ -32,7 +32,7 @@ public class HandlerFormula {
 	}
 	
 	public void splitDisjuncts(String row) {
-		String regex = "\\s*OR\\s*";
+		String regex = " OR ";
 		String[] parts = row.split(regex);
 		arrayOfDisjuncts.addAll(Arrays.asList(parts));
 	}
@@ -98,6 +98,39 @@ public class HandlerFormula {
 		for (String ss : subtermSet) {
 			System.out.println(ss);
 		};
+	}
+	
+	public String preProcessPredicate(String disjunct){
+		String regex = "\\s*(AND)\\s*";
+		String[] parts = disjunct.split(regex);
+		String newDisjunct = "";
+		for (String part : parts) {
+			if (part.contains("=") || part.contains("#")) {
+				newDisjunct += part;
+			}else{
+				newDisjunct += part + " = TRUE";
+			}
+			newDisjunct += " AND ";
+		}
+		return newDisjunct.substring(0, newDisjunct.length() - 5);
+	}
+	
+	public String preProcessQuantifier(String disjunct){
+		String regex = "\\s*AND\\s*";
+		String[] parts = disjunct.split(regex);
+		String newDisjunct = "";
+		for (String part : parts) {
+			if (part.contains("EXISTS")) {
+				newDisjunct += part.substring(0, part.indexOf("EXISTS")) + part.substring(part.indexOf("EXISTS") + 10, part.length() - 1);
+			}else if (part.contains("FORALL")){
+				newDisjunct += part.substring(0, part.indexOf("FORALL")) + part.substring(part.indexOf("FORALL") + 10, part.length() - 1);
+
+			}else{
+				newDisjunct += part;
+			}
+			newDisjunct += " AND ";
+		}
+		return newDisjunct.substring(0, newDisjunct.length() - 5);
 	}
 	
 	public void createSubtermSet(String subterm){
