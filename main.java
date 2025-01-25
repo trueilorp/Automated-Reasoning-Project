@@ -20,11 +20,19 @@ public class Main {
 				if (row.isEmpty()) {
 					continue;
 				}
+				
+				// Convert into DNF
+				// row = handlerFormula.convertIntoDNF(row);
+				
 				handlerFormula.splitDisjuncts(row);
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // itero sui disgunti
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
+
+					// Pre-processing predicate free predicate symbol
+					disjunct = handlerFormula.preProcessSymbolsFromOtherTheory(disjunct);
+					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
-					// Pe-processing predicate free predicate symbol
+					// Pre-processing predicate free predicate symbol
 					disjunct = handlerFormula.preProcessPredicate(disjunct);
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
@@ -42,6 +50,7 @@ public class Main {
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
 					handlerFormula.splitConjuncts(disjunct);
+					handlerFormula.clearSubtermSet();
 					for (int i = 0; i < handlerFormula.arrayOfConjuncts.size(); i++) { // itero sui congiunti
 						String conjunct = handlerFormula.getArrayOfConjuncts(i);
 						handlerFormula.createSubtermSet(conjunct);

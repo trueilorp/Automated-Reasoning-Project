@@ -1,1 +1,1 @@
-FORALL(X)(g(f(x)) = f(g(x))) AND EXISTS(Y)(f(g(f(y))) = x) AND f(y) = x AND g(f(x)) # x
+f(a) = a & (!(g(g(G(G(x)))))) = h & (a+b)+x = d & y = 2

@@ -1,16 +1,11 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Comparator;
-
 /*
  * Constant symbols: a,b,c,d
  * Function symbols: f,g,h
  */
+
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class HandlerFormula {
 	
@@ -20,8 +15,11 @@ public class HandlerFormula {
 	public List<String> arrayOfDisequalities;
 	public Set<String> subtermSet;
 	public final List<Character> charsToSkip = Arrays.asList(' ', '=', '#'); // # --> diverso !=
-	public final List<Character> charsToHandle = Arrays.asList(',', '(', ')');
-	public final List<Character> costantSymbolsAlreadyAdd = Arrays.asList();
+	public static final Set<String> charsFromOtherTheory = Set.of(
+	"+", "-", ":", "*", "/", "^", ">", "[", "]", "{", "}", 
+	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+
+
 
 	public HandlerFormula() {
 		arrayOfDisjuncts = new ArrayList<>();
@@ -32,19 +30,19 @@ public class HandlerFormula {
 	}
 	
 	public void splitDisjuncts(String row) {
-		String regex = " OR ";
+		String regex = "\\s*\\|\\s*";
 		String[] parts = row.split(regex);
 		arrayOfDisjuncts.addAll(Arrays.asList(parts));
 	}
 	
 	public void splitConjuncts(String row) {
-		String regex = "\\s*(AND|=|#)\\s*";
+		String regex = "\\s*(&|=|#)\\s*";
 		String[] parts = row.split(regex);
 		arrayOfConjuncts.addAll(Arrays.asList(parts));
 	}
 	
 	public void splitEqDis() {
-		String regex = "\\s*[AND]\\s*";
+		String regex = "\\s*[&]\\s*";
 		for (String disjunct : this.arrayOfDisjuncts) {
 			String[] parts = disjunct.split(regex);
 			for (String part : parts) {
@@ -101,7 +99,7 @@ public class HandlerFormula {
 	}
 	
 	public String preProcessPredicate(String disjunct){
-		String regex = "\\s*(AND)\\s*";
+		String regex = "\\s*(&)\\s*";
 		String[] parts = disjunct.split(regex);
 		String newDisjunct = "";
 		for (String part : parts) {
@@ -110,13 +108,13 @@ public class HandlerFormula {
 			}else{
 				newDisjunct += part + " = TRUE";
 			}
-			newDisjunct += " AND ";
+			newDisjunct += " & ";
 		}
-		return newDisjunct.substring(0, newDisjunct.length() - 5);
+		return newDisjunct.substring(0, newDisjunct.length() - 3);
 	}
 	
 	public String preProcessQuantifier(String disjunct){
-		String regex = "\\s*AND\\s*";
+		String regex = "\\s*&\\s*";
 		String[] parts = disjunct.split(regex);
 		String newDisjunct = "";
 		for (String part : parts) {
@@ -128,9 +126,80 @@ public class HandlerFormula {
 			}else{
 				newDisjunct += part;
 			}
-			newDisjunct += " AND ";
+			newDisjunct += " & ";
 		}
-		return newDisjunct.substring(0, newDisjunct.length() - 5);
+		return newDisjunct.substring(0, newDisjunct.length() -3);
+	}
+	
+	public String preProcessSymbolsFromOtherTheory(String formula){
+		String regex = "\\s*(&|=|#)\\s*";
+		String[] parts = formula.split(regex);
+		for (String part : parts) {
+			this.createSubtermSet(part);
+		}
+		this.sortSubtermSet();
+		Map<String, String> replacements = preProcessSymbolsFromOtherTheoryRec(formula);
+		Map<String, String> sortedReplacements = new LinkedHashMap<>();
+		replacements.entrySet().stream()
+			.sorted((e1, e2) ->  Integer.compare(e2.getKey().length(), e1.getKey().length())) // Ordina per lunghezza della chiave decrescente
+			.forEachOrdered(entry -> sortedReplacements.put(entry.getKey(), entry.getValue()));
+
+		for (Map.Entry<String, String> entry : sortedReplacements.entrySet()) {
+			String stringToReplace = entry.getKey();
+			String replace = entry.getValue();
+			formula = formula.replace(stringToReplace, replace);
+		}
+		return formula;
+	}
+	
+	public Map<String, String> preProcessSymbolsFromOtherTheoryRec(String formula){
+		Set<String> subtermSet = this.getSubtermSet();
+		int i = 1;
+		Map<String, String> replacements = new HashMap<>();
+
+		for (String subterm : subtermSet) {
+			if (charsFromOtherTheory.stream().anyMatch(subterm::contains)) {
+				String replacement = "fs_" + i;
+				i++;
+				replacements.put(subterm, replacement);
+			}
+		}
+		return replacements;
+	}
+	
+	public String convertIntoDNF(String row){
+		ConversionIntoDNF conversion = new ConversionIntoDNF();
+		return conversion.convertInDnf(row);
+	}
+
+
+	public static String processDefinedSymbols(String formula) {
+		Map<String, String> symbolMapping = new HashMap<>();
+		int freeSymbolCounter = 1;
+
+		// Regex to match defined symbols (e.g., functions like sin, cos, or arithmetic expressions)
+		String definedSymbolRegex = "\\w+\\([^\\)]*\\)|\\d+|\\w+ [+\\-*/] \\w+"; // Example patterns
+
+		Pattern pattern = Pattern.compile(definedSymbolRegex);
+		Matcher matcher = pattern.matcher(formula);
+
+		// Replace each match with a free symbol
+		while (matcher.find()) {
+			String definedSymbol = matcher.group();
+			if (!symbolMapping.containsKey(definedSymbol)) {
+				String freeSymbol = "free_symbol" + freeSymbolCounter++;
+				symbolMapping.put(definedSymbol, freeSymbol);
+				formula = formula.replace(definedSymbol, freeSymbol);
+			}
+		}
+
+		// Debug output: Print the mapping
+		System.out.println("Symbol Mapping:");
+		for (Map.Entry<String, String> entry : symbolMapping.entrySet()) {
+			System.out.println(entry.getKey() + " -> " + entry.getValue());
+		}
+
+		return formula;
 	}
 	
 	public void createSubtermSet(String subterm){
@@ -198,5 +267,9 @@ public class HandlerFormula {
 			}).thenComparingInt(String::length)
 		);
 		this.subtermSet = new LinkedHashSet<>(subtermSetList);
+	}
+	
+	public void clearSubtermSet() {
+		this.subtermSet.clear();
 	}
 }

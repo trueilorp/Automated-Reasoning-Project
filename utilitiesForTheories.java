@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class utilitiesForTheories{
 	
 	public static String preProcessAtom(String formula) {
-		String regex = "\\s*(AND)\\s*"; // Splitta la formula sugli operatori "AND"
+		String regex = "\\s*(&)\\s*"; // Splitta la formula sugli operatori "&"
 		String[] parts = formula.split(regex);
 		StringBuilder newConjuncts = new StringBuilder();
 		
@@ -29,11 +29,11 @@ public class utilitiesForTheories{
 			} else {
 				newConjunct = part;
 			}
-			newConjuncts.append(newConjunct).append(" AND ");
+			newConjuncts.append(newConjunct).append(" & ");
 		}
 		
-		// Rimuovi l'ultimo " AND " dalla stringa risultante
-		return newConjuncts.substring(0, newConjuncts.length() - 5);
+		// Rimuovi l'ultimo " & " dalla stringa risultante
+		return newConjuncts.substring(0, newConjuncts.length() - 3);
 	}
 	
 	public static String mapToFormula(Map<String, Object> map) {
@@ -108,8 +108,8 @@ public class utilitiesForTheories{
 		String stringForDisequality1 = unwrapOuterLayerAsString(formulaParsed);
 		
 		String[] finalConjunct = new String[2];
-		finalConjunct[1] = index1 + " = " + index2 + " AND " + value2 + symbol + args[1];
-		finalConjunct[0] = index1 + " # " + index2 + " AND " + stringForDisequality1 + symbol + args[1];
+		finalConjunct[1] = index1 + " = " + index2 + " & " + value2 + symbol + args[1];
+		finalConjunct[0] = index1 + " # " + index2 + " & " + stringForDisequality1 + symbol + args[1];
 		// return selectOverStore(finalConjunct, finalConjunct);
 		return finalConjunct;
 	}
@@ -161,7 +161,7 @@ public class utilitiesForTheories{
 	
 	public static String[] preProcessStoreRec(String[] parts){
 		for (String part : parts) {
-			String regex2 = "\\s*[=AND#]\\s*";
+			String regex2 = "\\s*[=&#]\\s*";
 			String[] args = part.split(regex2);
 			String symbol = "";
 			if(part.contains("#")){
@@ -179,14 +179,14 @@ public class utilitiesForTheories{
 	}
 	
 	public static String preProcessStore(String formula){
-		String regex = "\\s*(AND)\\s*"; // Splitta la formula sugli operatori "AND"
+		String regex = "\\s*(&)\\s*"; // Splitta la formula sugli operatori "&"
 		String[] parts = formula.split(regex);
 		StringBuilder newConjuncts = new StringBuilder();
 
 		// Check if formula contains the "store" function. If true, then apply the selectOverStore function
 		preProcessStoreRec(parts);
 		// newConjuncts.append(part);
-		// newConjuncts.append(" AND ");	
+		// newConjuncts.append(" & ");	
 
 		
 		for (String part : parts) { // i can consider the virgola in the middle because cannot exist formula like 'select(f(a,b,v),i) = v'
@@ -198,9 +198,9 @@ public class utilitiesForTheories{
 			} else {
 				newConjuncts.append(part);
 			}
-			newConjuncts.append(" AND ");
+			newConjuncts.append(" & ");
 		}
-		return newConjuncts.substring(0, newConjuncts.length() - 5);
+		return newConjuncts.substring(0, newConjuncts.length() - 3);
 	}
 	
 	public static void initializeForbiddenLists(String disequality, Dag dag) {
