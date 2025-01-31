@@ -41,19 +41,18 @@ public class HandlerFormula {
 		arrayOfConjuncts.addAll(Arrays.asList(parts));
 	}
 	
-	public void splitEqDis() {
+	public void splitEqDis(int j) {
 		String regex = "\\s*[&]\\s*";
-		for (String disjunct : this.arrayOfDisjuncts) {
-			String[] parts = disjunct.split(regex);
-			for (String part : parts) {
-				if (part.contains("=")) {
-					arrayOfEqualities.add(part); 
-				} else if (part.contains("#")) {
-					arrayOfDisequalities.add(part); 
-				}else{
-					// handle predicate 
-				}
-			}		
+		String disjunct = this.arrayOfDisjuncts.get(j);
+		String[] parts = disjunct.split(regex);
+		for (String part : parts) {
+			if (part.contains("=")) {
+				arrayOfEqualities.add(part); 
+			} else if (part.contains("#")) {
+				arrayOfDisequalities.add(part); 
+			}else{
+				// Do nothing
+			}
 		}
 	}
 

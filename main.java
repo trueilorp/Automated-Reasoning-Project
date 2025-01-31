@@ -3,11 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
 
 public class Main {
 	public static void main(String[] args) {
@@ -22,10 +18,11 @@ public class Main {
 				}
 				
 				// Convert into DNF
-				// row = handlerFormula.convertIntoDNF(row);
+				toDNF toDNF = new toDNF();
+				row = toDNF.transformIntoDNF(row);
 				
 				handlerFormula.splitDisjuncts(row);
-				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // itero sui disgunti
+				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // Iterate over disjuncts
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
 
 					// Pre-processing predicate free predicate symbol
@@ -107,7 +104,7 @@ public class Main {
 					}
 					
 					// Get equality and disequality
-					handlerFormula.splitEqDis();
+					handlerFormula.splitEqDis(j);
 					List<String> arrayOfEqualities = handlerFormula.getArrayOfEqualities();
 					List<String> arrayOfDisequalities = handlerFormula.getArrayOfDisequalities();
 					
@@ -120,12 +117,22 @@ public class Main {
 					
 					// Start Congruence Closure algorithm
 					CongruenceClosureAlgo congruenceClosure = new CongruenceClosureAlgo(dag);
-					congruenceClosure.decisionProcedure(arrayOfEqualities, arrayOfDisequalities);
-					System.out.println("#####################");
+					boolean result = congruenceClosure.decisionProcedure(arrayOfEqualities, arrayOfDisequalities);
+					System.out.println("\n#####################");
 					System.out.println("FINAL DAG:");
 					dag.printDag();
 					System.out.println("#####################");
+					
+					if (result) {
+						System.out.println("\n----> SAT");
+						return;
+					} else {
+						System.out.println("\nTRY THE NEXT DISJUNCT...");
+					}
 				}
+				System.out.println("\nNO MORE DISJUNCTS TO TRY!");
+				System.out.println("----> UNSAT");
+				return;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

@@ -127,7 +127,7 @@ public class CongruenceClosureAlgo {
 	}
 
 	// DECISION PROCEDURE
-	public void decisionProcedure(List<String> arrayOfEqualities, List<String> arrayOfDisequalities){
+	public boolean decisionProcedure(List<String> arrayOfEqualities, List<String> arrayOfDisequalities){
 
 		// Process DAG for non-empty possibly cyclic lists
 		NonEmptyPossibleCyclicList nonEmptyPossibleCyclicList = new NonEmptyPossibleCyclicList();
@@ -137,7 +137,7 @@ public class CongruenceClosureAlgo {
 		this.dag.printDag();
 		
 		boolean forbiddListCheck = false;		
-		System.out.println("START CONGRUENCE CLOSURE ALGORITHM...\n");
+		System.out.println("\nSTART CONGRUENCE CLOSURE ALGORITHM...");
 		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {
 			System.out.println("\n###########\nEQUALITY NUMBER:" + (eq + 1));
 			String c = arrayOfEqualities.get(eq);
@@ -153,10 +153,10 @@ public class CongruenceClosureAlgo {
 		
 		if(forbiddListCheck == true){
 			System.out.println("UNSAT");
-			return;
+			return false;
 		}
 		
-		System.out.println("CHECK FINDS TO SAT UNSAT...");
+		System.out.println("\nCHECK FINDS TO SAT UNSAT...");
 		boolean finalResult = true;
 		for (int dis = 0; dis < arrayOfDisequalities.size(); dis++) {
 			String dc = arrayOfDisequalities.get(dis);
@@ -177,11 +177,15 @@ public class CongruenceClosureAlgo {
 				break;
 			}
 		}
-		System.out.println("\n\n#############");
+		System.out.println("\n#############");
 		if(finalResult == false){
-			System.out.println("UNSAT");
+			System.out.println("DISJUNCT UNSAT");
+			System.out.println("#############");
+			return false;
 		}else{
-			System.out.println("SAT");
+			System.out.println("DISJUNCT SAT");
+			System.out.println("#############");
+			return true;
 		}
-		System.out.println("#############\n\n");}
+	}
 }

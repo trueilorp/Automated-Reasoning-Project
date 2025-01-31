@@ -1,31 +1,33 @@
-fare(g(x), fare(aaaaaaaaaaaaaaaaa,b,c), h(x)) = a AND f(f(a,b),b) # a OR f(f(f(f(f(a))))) = r AND f(f(f(a))) = a AND ratto(y) = x
+fare(g(x), fare(aaaaaaaaaaaaaaaaa,b,c), h(x)) = a & f(f(a,b),b) # a | f(f(f(f(f(a))))) = r & f(f(f(a))) = a & ratto(y) = x
 
-f(f(a,b),b) # a AND f(f(f(f(f(a))))) = r
+f(f(a,b),b) # a & f(f(f(f(f(a))))) = a
 
-f(f(f(a))) = a AND g(x) AND f(a) # a
+f(f(f(a))) = a & g(x) & f(a) # a
 
-f(a,b) = a AND f(f(a,b),b) # a
+f(a,b) = a & f(f(a,b),b) # a
 
-f(f(f(a))) = a AND f(f(f(f(f(a))))) = a AND f(a) # a
+f(f(f(a))) = a & f(f(f(f(f(a))))) = a & f(a) # a
 
-f(x,y) = f(y,x) AND f(a,y) # f(y,a)
+f(x,y) = f(y,x) & f(a,y) # f(y,a)
 
-f(g(x)) = g(f(x)) AND f(g(f(y))) = x AND f(y) = x AND g(f(x)) # x
+f(g(x)) = g(f(x)) & f(g(f(y))) = x & f(y) = x & g(f(x)) # x
 
-f(f(f(a))) = f(f(a)) AND f(f(f(f(a)))) = a AND f(a) # a
+f(f(f(a))) = f(f(a)) & f(f(f(f(a)))) = a & f(a) # a
 
-f(f(f(a))) = f(a) AND f(f(a)) = a AND f(a) # a
+f(f(f(a))) = f(a) & f(f(a)) = a & f(a) # a
 
-car(a) = car(b) AND cdr(a) = cdr(b) AND !(atom(a)) AND !(atom(b))
+car(a) = car(b) & cdr(a) = cdr(b) & !(atom(a)) & !(atom(b))
 
-car(x) = car(y) AND cdr(x) = cdr(y) AND !(atom(x)) AND !(atom(y)) AND f(x) # f(y)
+car(x) = car(y) & cdr(x) = cdr(y) & !(atom(x)) & !(atom(y)) & f(x) # f(y)
 
-select(a,i) = v AND select(b,j) = m AND f(a) = f(b) AND x # y
+select(a,i) = v & select(b,j) = m & f(a) = f(b) & x # y
 
-select(store(store(a,i1,v1),i2,v2),j) = f(x,y) AND select(b,j) = m AND f(a) = f(b) AND x # y
+select(store(store(a,i1,v1),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) = f(b) & x # y
 
-f(g(x)) = FORALL(X)((g(f(x)))) AND EXISTS(Y)(f(g(f(y)))) = x AND f(y) = x AND g(f(x)) # x
+f(g(x)) = FORALL(X)((g(f(x)))) & EXISTS(Y)(f(g(f(y)))) = x & f(y) = x & g(f(x)) # x
 
 (!(f(a))) -> ((!(g(g(G(G(x))))) -> (a + b & x)))
 
 !(f(a)) & (!(g(g(G(G(x)))))) & (a + b) + x & y
+
+f(f(a,b),b) # a & f(f(f(f(f(a))))) = r | f(d) # a & f(e) = r | f(f(a,b),b) # a
