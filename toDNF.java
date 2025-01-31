@@ -3,16 +3,38 @@ import java.util.*;
 public class toDNF {
 	
 	Map<Character, String> mapFunLit;
+	Map<Character, String> mapEqDiseqLit;
 	
 	public toDNF(){
 		mapFunLit = new HashMap<Character,String>();
+		mapEqDiseqLit = new HashMap<Character, String>();
 	}
 	
-	public String transformIntoDNF(String data) {
+	public String transformIntoDNF(String formula){
+		String finalFormula = "";
 		// First do a mapping
-		data = mapFunctionToLiteral(data);
+		formula = formula.replaceAll("\\s+", ""); // Remove balnk spaces from the string
+		mapFunctionToLiteral(formula);
+		Map<Character, String> mapFL = fixMap(mapFunLit);
+		this.mapFunLit = mapFL;
+		finalFormula = getFormulaFromMap(formula, mapFunLit);
+
+		mapEqualitiesToLiteral(finalFormula);
+		Map<Character, String> mapED = fixMap(mapEqDiseqLit);
+		this.mapEqDiseqLit = mapED;
+		finalFormula = getFormulaFromMap(finalFormula, mapEqDiseqLit);
+		// finalFormula = mapLiteralToEqualities(finalFormula);
+		
+		finalFormula = getDNFOfLIteral(finalFormula);
+		finalFormula = reMap(finalFormula);
+		finalFormula = cleanString(finalFormula);
+		
+		return finalFormula;
+	}
+	
+	public String getDNFOfLIteral(String data) {	
 		ArrayList<String> Literals = new ArrayList<>();
-		StringTokenizer mytoken = new StringTokenizer(data, " )(<>-!&|");
+		StringTokenizer mytoken = new StringTokenizer(data, " ][<>-!&|");
 		while (mytoken.hasMoreTokens()) {
 			String temp = mytoken.nextToken();
 			if (!Literals.contains(temp)) {
@@ -43,8 +65,8 @@ public class toDNF {
 		Stack<Literal> stack = new Stack<>();
 		char[] Cdata = data.toCharArray();
 		// data = "(" + data + ")";
-		data = data.replace("(", " ( ");
-		data = data.replace(")", " )");
+		data = data.replace("[", " [ ");
+		data = data.replace("]", " ]");
 		data = data.replace("!", " ! ");
 		data = data.replace("&", " & ");
 		data = data.replace("|", " | ");
@@ -64,7 +86,7 @@ public class toDNF {
 			} else if (temp.equals("!")) {
 				stack.push(new Literal("!", null));
 
-			} else if (temp.equals(")")) {
+			} else if (temp.equals("]")) {
 				Literal b = stack.pop();
 				Literal func = stack.pop();
 				if (func.name.equals("!")) {
@@ -95,7 +117,7 @@ public class toDNF {
 		for (int i = 0; i < FinalAnswer.myTF.length; i++) {
 			boolean flag = false;
 			if (FinalAnswer.myTF[i] == 1) {
-				String temp = "(";
+				String temp = "[";
 				for (Literal literal : literalData) {
 					if (flag) {
 						temp += " &";
@@ -107,18 +129,17 @@ public class toDNF {
 					else
 						temp = temp + " !" + literal.name;
 				}
-				temp = temp + " )";
+				temp = temp + " ]";
 				result = result + " | " + temp;
 			}
 		}
-		result = result.replace("  | (", " (");
+		result = result.replace("  | [", " ]");
 		if (result.equals(" "))
-			return "( " + literalData.get(0).name + " & !" + literalData.get(0).name + " )" + "  *all false case";
+			return "[ " + literalData.get(0).name + " & !" + literalData.get(0).name + " ]" + "  *all false case";
 		return result;
 	}
 	
-	public String mapFunctionToLiteral(String formula){
-		
+	public void mapFunctionToLiteral(String formula){
 		for (int i = 0; i < formula.length(); i++){
 			if (formula.charAt(i) == '(') {
 				int openParenthesis = 0;
@@ -138,31 +159,17 @@ public class toDNF {
 						i = j - 1;
 						break;
 					}
-				}				
-			// Handle case in which name function lenght is greater than 1 (ex: ffff(a))
-			// }else if(Character.isLetter(formula.charAt(i))){
-			// 	for (int m = i; m < formula.length(); m++){
-			// 		if(!(Character.isLetter(formula.charAt(m)))){
-			// 			String stringToMap = formula.substring(i, m);
-			// 			mapFunLit.put(stringToMap.charAt(0), stringToMap);
-			// 			i = m - 1;
-			// 			break;
-			// 		}
-			// 	}
+				}
 			}
 		}
-		
-		fixMap();
-		String result = getFormulaFromMap(formula);
-		return result;
 	}
 	
-	public void fixMap() {
+	public Map<Character, String> fixMap(Map<Character, String> map) {
 		Map<Character, String> uniqueMap = new HashMap<>();
 		Map<String, List<Character>> valueToKeys = new HashMap<>();
 		
 		// Step 1: Traverse the original map and check for conflicts.
-		for (Map.Entry<Character, String> entry : mapFunLit.entrySet()) {
+		for (Map.Entry<Character, String> entry : map.entrySet()) {
 			Character key = entry.getKey();
 			String value = entry.getValue();
 			
@@ -183,23 +190,21 @@ public class toDNF {
 			// Add the modified key-value pair to uniqueMap
 			uniqueMap.put(key, value);
 		}
-		mapFunLit = uniqueMap;
-		sortMapByValueLengthDescending();
+		return sortMapByValueLengthDescending(uniqueMap);
 	}
 	
-	public void sortMapByValueLengthDescending() {
-		List<Map.Entry<Character, String>> entryList = new ArrayList<>(this.mapFunLit.entrySet());
+	public Map<Character, String> sortMapByValueLengthDescending(Map<Character, String> map) {
+		List<Map.Entry<Character, String>> entryList = new ArrayList<>(map.entrySet());
 		entryList.sort((entry1, entry2) -> Integer.compare(entry2.getValue().length(), entry1.getValue().length()));
 		Map<Character, String> sortedMap = new LinkedHashMap<>();
 		for (Map.Entry<Character, String> entry : entryList) {
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
-
-		this.mapFunLit = sortedMap;
+		return sortedMap;
 	}
 	
-	public String getFormulaFromMap(String formula){
-		for (Map.Entry<Character, String> entry : mapFunLit.entrySet()) {
+	public String getFormulaFromMap(String formula, Map<Character, String> map){
+		for (Map.Entry<Character, String> entry : map.entrySet()) {
 			Character key = entry.getKey();
 			String value = entry.getValue();
 			formula = formula.replace(value, key.toString());
@@ -216,6 +221,34 @@ public class toDNF {
 		}
 		return (char) (keyString.charAt(0) + suffix);
 	}
+	
+	public String mapEqualitiesToLiteral(String formula){
+		for (int i = 0; i < formula.length(); i++){
+			if((formula.charAt(i) == '=') || (formula.charAt(i) == '#')){
+				mapEqDiseqLit.put((char) (65 + (i % 26)), formula.substring(i-1, i+2));
+			}
+		} 
+		return "";
+	}
+	
+	public String reMap(String formula){
+		for (Map.Entry<Character, String> entry : this.mapEqDiseqLit.entrySet()) {
+			Character key = entry.getKey();
+			String value = entry.getValue();
+			formula = formula.replace(key.toString(), value);
+		}
+		
+		for (Map.Entry<Character, String> entry : this.mapFunLit.entrySet()) {
+			Character key = entry.getKey();
+			String value = entry.getValue();
+			formula = formula.replace(key.toString(), value);
+		}
+		return formula;
+	}
+	
+	public String cleanString(String f){
+		return f.replaceAll("[\\[\\] ]", ""); 
+	}
 }
 
 class Literal {
@@ -226,18 +259,6 @@ class Literal {
 
 	String name;
 	int[] myTF;
-
-	// void printMe() {
-	// 	System.out.println();
-	// 	System.out.print(name + " : ");
-	// 	for (int i : myTF) {
-	// 		if (i == 0)
-	// 			System.out.print("F ");
-	// 		else
-	// 			System.out.print("T ");
-	// 	}
-	// 	System.out.println();
-	// }
 
 	public static Literal opHandler(Literal a, Literal b, Literal func) {
 		if (func.name.equals("!"))

@@ -18,8 +18,8 @@ public class Main {
 				}
 				
 				// Convert into DNF
-				toDNF toDNF = new toDNF();
-				row = toDNF.transformIntoDNF(row);
+				// toDNF toDNF = new toDNF();
+				// row = toDNF.transformIntoDNF(row);
 				
 				handlerFormula.splitDisjuncts(row);
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // Iterate over disjuncts
@@ -139,10 +139,3 @@ public class Main {
 		}
 	}
 }
-
-
-// TODO:
-// VERIFICARE SE E' GIUSTO COME AGGIORNA TUTTI I FIND NELLA UNION, PROBABILMENTE NO PROBLEMI CON F(f(f(f(f(A))))) = ....
-
-// Start preprocess dag for cyclic list (merge car and cdr)
-// TODO: look at order of args in the merge with n.args

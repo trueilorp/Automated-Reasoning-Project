@@ -31,3 +31,7 @@ f(g(x)) = FORALL(X)((g(f(x)))) & EXISTS(Y)(f(g(f(y)))) = x & f(y) = x & g(f(x)) 
 !(f(a)) & (!(g(g(G(G(x)))))) & (a + b) + x & y
 
 f(f(a,b),b) # a & f(f(f(f(f(a))))) = r | f(d) # a & f(e) = r | f(f(a,b),b) # a
+
+[p->[f(f(f(a)))->r]]->[[p&[!f(f(f(f(f(a)))))]]|g(x)]
+
+[p->[f(f(f(a))) = a->r]] -> [[p&[!f(f(f(f(f(a)))))]]|g(x)]

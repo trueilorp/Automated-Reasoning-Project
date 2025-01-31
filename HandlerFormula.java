@@ -105,7 +105,12 @@ public class HandlerFormula {
 			if (part.contains("=") || part.contains("#")) {
 				newDisjunct += part;
 			}else{
-				newDisjunct += part + " = TRUE";
+				if(part.contains("!")){
+					part = part.replace("!", "");
+					newDisjunct += part + " = FALSE";
+				}else{
+					newDisjunct += part + " = TRUE";
+				}
 			}
 			newDisjunct += " & ";
 		}
