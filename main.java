@@ -28,11 +28,11 @@ public class Main {
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // Iterate over disjuncts
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
 
-					// Pre-processing predicate free predicate symbol
+					// Pre-processing symbols from other theories
 					disjunct = handlerFormula.preProcessSymbolsFromOtherTheory(disjunct);
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
-					// Pre-processing predicate free predicate symbol
+					// Pre-processing predicate
 					disjunct = handlerFormula.preProcessPredicate(disjunct);
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
@@ -131,25 +131,25 @@ public class Main {
 						utilitiesForTheories.initializeForbiddenLists(disequality, dag);
 					}
 					
-					dag.printDag();
+					//dag.printDag();
 					
 					// Start Congruence Closure algorithm
 					CongruenceClosureAlgo congruenceClosure = new CongruenceClosureAlgo(dag);
 					boolean result = congruenceClosure.decisionProcedure(arrayOfEqualities, arrayOfDisequalities);
-					System.out.println("\n#####################");
-					System.out.println("FINAL DAG:");
+					// System.out.println("\n#####################");
+					// System.out.println("FINAL DAG:");
 					dag.printDag();
-					System.out.println("#####################");
+					// System.out.println("#####################");
 					
 					if (result) {
-						System.out.println("\n----> SAT");
+						System.out.println("\nDISJUNCT N. " + j +  " ----> SAT");
 						return;
 					} else {
 						System.out.println("\nTRY THE NEXT DISJUNCT...");
 					}
 				}
 				System.out.println("\nNO MORE DISJUNCTS TO TRY!");
-				System.out.println("----> UNSAT");
+				System.out.println("\nFORMULA ----> UNSAT");
 				return;
 			}
 		} catch (FileNotFoundException e) {

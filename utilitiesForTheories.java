@@ -182,23 +182,4 @@ public class utilitiesForTheories {
 		args.add(currentArg.toString()); // Aggiungi l'ultimo argomento
 		return args;
 	}
-
-	public static Map<String, Object> getStoreArgumentsAtDepth(Map<String, Object> node, int depth) {
-
-		// Caso base: se la profondità è 0, restituisci l'intera mappa degli argomenti
-		if (depth == 0) {
-			return node; // Restituisci l'intera struttura
-		}
-
-		// Altrimenti, esplora ricorsivamente il campo "array"
-		@SuppressWarnings("unchecked")
-		Map<String, Object> innerArray = (Map<String, Object>) node.get("array");
-
-		if (innerArray != null) {
-			return getStoreArgumentsAtDepth(innerArray, depth - 1);
-		}
-
-		// Se non ci sono altri nodi da esplorare, restituisci null
-		return null;
-	}
 }

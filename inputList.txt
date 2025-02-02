@@ -28,7 +28,7 @@ x # y & select(store(store(a,i1,v1),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) 
 
 x # y & select(store(store(store(a,i1,v1),i3,v3),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) = f(b)
 
-f(g(x)) = FORALL(X)((g(f(x)))) & EXISTS(Y)(f(g(f(y)))) = x & f(y) = x & g(f(x)) # x
+f(g(x)) = FORALL(x)((g(f(x)))) & EXISTS(y)(f(g(f(y)))) = x & f(y) = x & g(f(x)) # x
 
 (!(f(a))) -> ((!(g(g(G(G(x))))) -> (a + b & x)))
 
@@ -39,3 +39,25 @@ f(f(a,b),b) # a & f(f(f(f(f(a))))) = r | f(d) # a & f(e) = r | f(f(a,b),b) # a
 [p->[f(f(f(a)))->r]]->[[p&[!f(f(f(f(f(a)))))]]|g(x)]
 
 [p->[f(f(f(a))) = a->r]] -> [[p&[!f(f(f(f(f(a)))))]]|g(x)] --- T0-TRASFORM-DNF
+
+-----------------
+
+i1 = j & i1 # i2 & select(a,j) = v1 & select(store(store(a,i1,v1),i2,v2),j) # select(a,j)
+select(store(a,i,e), j) = e & i # j
+select(store(a,i,e), j) = e & select(a,j) ! e
+select(store(a,i,e), j) = e & i = j & select(a,j) ! e
+select(store(store(a,j,f),i,e), k) = g & j # k & i = j & select(a,k) ! g
+i1 = j & select(a,j) = v1 & select(store(store(a,i1,v1),i2,v2), j) # select(a,j)
+f(a,b) = a & f(f(a,b),b) ! a
+f(f(f(a))) = a & f(f(f(f(f(a))))) = a & f(a) ! a
+f(x,y) = f(y,x) & f(a,y) ! f(y,a)
+f(g(x)) = g(f(x)) & f(g(f(y))) = x & f(y) = x & g(f(x)) ! x
+f(f(f(a))) = f(f(a)) & f(f(f(f(a)))) = a & f(a) ! a
+f(f(f(a))) = f(a) & f(f(a)) = a & f(a) ! a
+p(x) & f(f(x)) = x & f(f(f(x))) = x & !p(f(x))
+car(x) = car(y) & cdr(x) = cdr(y) & f(x) ! f(y) & !atom(x) & !atom(y)
+car(x) = y & cdr(x) = z & x#cons(y,z)
+!atom(x) & car(x) = y & cdr(x) = z & x # cons(y,z)
+atom(x) & !atom(x)
+atom(x) & cons(x,y) = x
+car(cons(a,b)) = v & v = a & v = b & a # b

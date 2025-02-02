@@ -106,15 +106,15 @@ public class CongruenceClosureAlgo {
 	
 	public boolean mergeCC(int id1, int id2){
 		if(returnNodeCC(id1).getForbiddenList().contains(id2) || returnNodeCC(id2).getForbiddenList().contains(id1)){
-			System.out.println("---> UNSAT");
+			System.out.println("\nDISJUNCT ----> UNSAT");
 			return true;
 		}
 		if(findNodeCC(id1) != findNodeCC(id2)){
 			Set<Integer> p1 = new LinkedHashSet<>(ccparCC(id1));
 			Set<Integer> p2 = new LinkedHashSet<>(ccparCC(id2));
 			unionCC(id1, id2);
-			System.out.println("###############\nCURRENT DAG: ");
-			this.dag.printDag();
+			// System.out.println("###############\nCURRENT DAG: ");
+			// this.dag.printDag();
 			for (int t1 : p1) {
 				for (int t2 : p2) {
 					if(findNodeCC(t1) != findNodeCC(t2) && congruenceCC(t1, t2)){
@@ -133,13 +133,14 @@ public class CongruenceClosureAlgo {
 		NonEmptyPossibleCyclicList nonEmptyPossibleCyclicList = new NonEmptyPossibleCyclicList();
 		this.dag = nonEmptyPossibleCyclicList.processCyclicList(this.dag);
 		
-		System.out.println("\n#############\nDAG AFTER PREPROCESS CYCLIC LIST:");
-		this.dag.printDag();
+		// System.out.println("\n#############\nDAG AFTER PREPROCESS CYCLIC LIST:");
+		// this.dag.printDag();
 		
 		boolean forbiddListCheck = false;		
+		System.out.println("\n#####################################");
 		System.out.println("\nSTART CONGRUENCE CLOSURE ALGORITHM...");
 		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {
-			System.out.println("\n###########\nEQUALITY NUMBER:" + (eq + 1));
+			// System.out.println("\nEQUALITY NUMBER:" + (eq + 1));
 			String c = arrayOfEqualities.get(eq);
 			String c1 = c.split("\\s*=\\s*")[0];
 			String c2 = c.split("\\s*=\\s*")[1];
@@ -152,11 +153,11 @@ public class CongruenceClosureAlgo {
 		}
 		
 		if(forbiddListCheck == true){
-			System.out.println("UNSAT");
+			// System.out.println("UNSAT");
 			return false;
 		}
 		
-		System.out.println("\nCHECK FINDS TO SAT UNSAT...");
+		// System.out.println("\nCHECK FINDS TO SAT UNSAT...");
 		boolean finalResult = true;
 		for (int dis = 0; dis < arrayOfDisequalities.size(); dis++) {
 			String dc = arrayOfDisequalities.get(dis);
@@ -179,12 +180,12 @@ public class CongruenceClosureAlgo {
 		}
 		System.out.println("\n#############");
 		if(finalResult == false){
-			System.out.println("DISJUNCT UNSAT");
-			System.out.println("#############");
+			// System.out.println("DISJUNCT UNSAT");
+			// System.out.println("#############");
 			return false;
 		}else{
-			System.out.println("DISJUNCT SAT");
-			System.out.println("#############");
+			// System.out.println("DISJUNCT SAT");
+			// System.out.println("#############");
 			return true;
 		}
 	}

@@ -144,7 +144,7 @@ public class HandlerFormula {
 		Map<String, String> replacements = preProcessSymbolsFromOtherTheoryRec(formula);
 		Map<String, String> sortedReplacements = new LinkedHashMap<>();
 		replacements.entrySet().stream()
-			.sorted((e1, e2) ->  Integer.compare(e2.getKey().length(), e1.getKey().length())) // Ordina per lunghezza della chiave decrescente
+			.sorted((e1, e2) ->  Integer.compare(e2.getKey().length(), e1.getKey().length()))
 			.forEachOrdered(entry -> sortedReplacements.put(entry.getKey(), entry.getValue()));
 
 		for (Map.Entry<String, String> entry : sortedReplacements.entrySet()) {
