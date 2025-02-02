@@ -1,3 +1,1 @@
-
-
-f(f(f(a))) = a & f(f(f(f(f(a))))) = a & f(a) # a
+i1 = j & i1 # i2 & select(a,j) = v1 & select(store(store(a,i1,v1),i2,v2),j) # select(a,j)

@@ -18,8 +18,11 @@ public class Main {
 				}
 				
 				// Convert into DNF
-				// toDNF toDNF = new toDNF();
-				// row = toDNF.transformIntoDNF(row);
+				if (row.substring(row.length() - 20, row.length()).equals(" --- T0-TRASFORM-DNF")){
+					row = row.substring(0, row.length() - 20);
+					toDNF toDNF = new toDNF();
+					row = toDNF.transformIntoDNF(row);
+				}
 				
 				handlerFormula.splitDisjuncts(row);
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // Iterate over disjuncts
@@ -38,11 +41,26 @@ public class Main {
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
 					// Pre-processing for theory of array without estensionality
-					utilitiesForTheories utilities = new utilitiesForTheories();
-					disjunct = utilities.preProcessStore(disjunct);
+					ArrayWithoutEstensionality arrayWithoutEstensionality = new ArrayWithoutEstensionality();
+					arrayWithoutEstensionality.preProcessStore(disjunct);
+					if(!(arrayWithoutEstensionality.listDisjunctsCreated.isEmpty())){
+						List<String> disjuncts = arrayWithoutEstensionality.getDisjunctsFromLists();
+						disjunct = arrayWithoutEstensionality.removeStoreFromString(disjunct);// Remove store from disjunct
+						for (String dis : disjuncts) { // Work on the first disjunct and add the others to the arrayOfDisjunct list
+							String disjunctToAdd = disjunct + " & " + dis; 
+							handlerFormula.arrayOfDisjuncts.add(disjunctToAdd);
+						}
+						disjunct = disjunct + " & " + disjuncts.getFirst();
+					}else{
+						disjunct = arrayWithoutEstensionality.removeStoreFromString(disjunct);
+					}
+					
+					disjunct = arrayWithoutEstensionality.modifySelect(disjunct); // Modify select
+					// Add initial formula to all disjuncts
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					
 					// Pre-processing for theory of non-empty possible cyclic lists
+					utilitiesForTheories utilities = new utilitiesForTheories();
 					disjunct = utilities.preProcessAtom(disjunct);
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
 					

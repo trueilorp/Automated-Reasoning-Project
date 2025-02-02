@@ -106,7 +106,7 @@ public class CongruenceClosureAlgo {
 	
 	public boolean mergeCC(int id1, int id2){
 		if(returnNodeCC(id1).getForbiddenList().contains(id2) || returnNodeCC(id2).getForbiddenList().contains(id1)){
-			System.out.println("UNSATTTTTTTTTTTTTTTTTTTTTT");
+			System.out.println("---> UNSAT");
 			return true;
 		}
 		if(findNodeCC(id1) != findNodeCC(id2)){

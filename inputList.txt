@@ -22,7 +22,11 @@ car(x) = car(y) & cdr(x) = cdr(y) & !(atom(x)) & !(atom(y)) & f(x) # f(y)
 
 select(a,i) = v & select(b,j) = m & f(a) = f(b) & x # y
 
-select(store(store(a,i1,v1),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) = f(b) & x # y
+select(store(store(a,i1,v1),i2,v2),j) = select(a,j) & select(b,j) = m & f(a) = f(b) & x # y
+
+x # y & select(store(store(a,i1,v1),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) = f(b)
+
+x # y & select(store(store(store(a,i1,v1),i3,v3),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) = f(b)
 
 f(g(x)) = FORALL(X)((g(f(x)))) & EXISTS(Y)(f(g(f(y)))) = x & f(y) = x & g(f(x)) # x
 
@@ -34,4 +38,4 @@ f(f(a,b),b) # a & f(f(f(f(f(a))))) = r | f(d) # a & f(e) = r | f(f(a,b),b) # a
 
 [p->[f(f(f(a)))->r]]->[[p&[!f(f(f(f(f(a)))))]]|g(x)]
 
-[p->[f(f(f(a))) = a->r]] -> [[p&[!f(f(f(f(f(a)))))]]|g(x)]
+[p->[f(f(f(a))) = a->r]] -> [[p&[!f(f(f(f(f(a)))))]]|g(x)] --- T0-TRASFORM-DNF

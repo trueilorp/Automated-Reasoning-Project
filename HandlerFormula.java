@@ -16,10 +16,9 @@ public class HandlerFormula {
 	public Set<String> subtermSet;
 	public final List<Character> charsToSkip = Arrays.asList(' ', '=', '#'); // # --> diverso !=
 	public static final Set<String> charsFromOtherTheory = Set.of(
-	"+", "-", ":", "*", "/", "^", ">", "[", "]", "{", "}", 
-	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-
-
+	"+", "-", ":", "*", "/", "^", ">");
+	
+	// "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
 
 	public HandlerFormula() {
 		arrayOfDisjuncts = new ArrayList<>();
@@ -170,12 +169,6 @@ public class HandlerFormula {
 		}
 		return replacements;
 	}
-	
-	public String convertIntoDNF(String row){
-		ConversionIntoDNF conversion = new ConversionIntoDNF();
-		return conversion.convertInDnf(row);
-	}
-
 
 	public static String processDefinedSymbols(String formula) {
 		Map<String, String> symbolMapping = new HashMap<>();
