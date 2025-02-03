@@ -1,9 +1,7 @@
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class utilitiesForTheories {
 
@@ -19,15 +17,11 @@ public class utilitiesForTheories {
 			String u = "u" + counter; // Genera u1, u2, ...
 			String v = "v" + counter; // Genera v1, v2, ...
 
-			if (part.contains("!(atom")) {
-				String arg = part.substring(7, part.length() - 2);
+			if (part.contains("!atom")) {
+				String arg = "" + part.charAt(6);
 				newConjunct = arg + " = cons(" + u + "," + v + ")";
 				counter++; // Incrementa il contatore per le prossime variabili
-			} else if (part.contains("atom")) {
-				String arg = part.substring(7, part.length() - 2);
-				newConjunct = arg + " = cons(" + u + "," + v + ") # ";
-				counter++; // Incrementa il contatore per le prossime variabili
-			} else {
+			}else {
 				newConjunct = part;
 			}
 			newConjuncts.append(newConjunct).append(" & ");

@@ -1,4 +1,4 @@
-# README
+# Automated Reasoning Project
 
 ## Input Handling
 
@@ -14,6 +14,9 @@ The program reads input from a text file (`input.txt`) and processes it based on
 
 - **Restricted Variables (`u, v`)**  
   The variables `u` and `v` should not appear in the input formula, as they are reserved for preprocessing formulas in the **theory of lists**.
+  
+- **Restricted Arg of Atom**  
+  The argument of **atom** must be only **one char**.
 
 - **Restricted Function Name (`ff`)**  
   The function name `ff` should not be used, as it is reserved for preprocessing formulas related to the **theory of arrays**.

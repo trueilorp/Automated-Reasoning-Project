@@ -171,13 +171,23 @@ public class CongruenceClosureAlgo {
 			}else{
 				finalResult = true;
 			}
-			
-			// Controlla se FIND(v) == FIND(ui) e v.fn == "cons"
-			if (this.findNodeCC(id1) == this.findNodeCC(id2) && this.returnNodeCC(id2).getFn().equals("cons")) {
-				finalResult = false;
-				break;
+		}
+		
+		// Control if FIND(v) == FIND(ui) & v.fn == "cons"
+		for (int eq = 0; eq < arrayOfEqualities.size(); eq++) {
+			String c = arrayOfEqualities.get(eq);
+			String c1 = c.split("\\s*=\\s*")[0];
+			String c2 = c.split("\\s*=\\s*")[1];
+			int id1 = this.dag.findNodeWithFnComplete(c1);
+			int id2 = this.dag.findNodeWithFnComplete(c2);
+			if ((this.returnNodeCC(id1).getFn().equals("cons")) || (this.returnNodeCC(id2).getFn().equals("cons"))){
+				if(this.findNodeCC(id1) == this.findNodeCC(id2)) {
+					finalResult = false;
+					break;
+				}
 			}
 		}
+		
 		System.out.println("\n#############");
 		if(finalResult == false){
 			// System.out.println("DISJUNCT UNSAT");

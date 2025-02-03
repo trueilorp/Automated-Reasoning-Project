@@ -1,8 +1,6 @@
-import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Dag implements Cloneable {
 	public List<Node> listOfNodes;
@@ -15,7 +13,7 @@ public class Dag implements Cloneable {
 	public Dag clone() {
 		try {
 			Dag clonedDag = (Dag) super.clone();
-			clonedDag.listOfNodes = new ArrayList<>(this.listOfNodes); // Creates a new ArrayList with the same elements
+			clonedDag.listOfNodes = new ArrayList<>(this.listOfNodes); // Create a new ArrayList with the same elements
 			return clonedDag;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -23,7 +21,6 @@ public class Dag implements Cloneable {
 		}
 	}
 
-	
 	public List<Node> getListOfNodes() {
 		return this.listOfNodes;
 	}

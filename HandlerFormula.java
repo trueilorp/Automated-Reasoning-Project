@@ -1,8 +1,3 @@
-/*
- * Constant symbols: a,b,c,d
- * Function symbols: f,g,h
- */
-
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -17,8 +12,6 @@ public class HandlerFormula {
 	public final List<Character> charsToSkip = Arrays.asList(' ', '=', '#'); // # --> diverso !=
 	public static final Set<String> charsFromOtherTheory = Set.of(
 	"+", "-", ":", "*", "/", "^", ">");
-	
-	// "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
 
 	public HandlerFormula() {
 		arrayOfDisjuncts = new ArrayList<>();
@@ -104,11 +97,15 @@ public class HandlerFormula {
 			if (part.contains("=") || part.contains("#")) {
 				newDisjunct += part;
 			}else{
-				if(part.contains("!")){
-					part = part.replace("!", "");
-					newDisjunct += part + " = FALSE";
+				if(!(part.contains("!atom"))){
+					if(part.contains("!")){
+						part = part.replace("!", "");
+						newDisjunct += part + " # TRUE";
+					}else{
+						newDisjunct += part + " = TRUE";
+					}
 				}else{
-					newDisjunct += part + " = TRUE";
+					newDisjunct += part;
 				}
 			}
 			newDisjunct += " & ";
@@ -122,9 +119,9 @@ public class HandlerFormula {
 		String newDisjunct = "";
 		for (String part : parts) {
 			if (part.contains("EXISTS")) {
-				newDisjunct += part.substring(0, part.indexOf("EXISTS")) + part.substring(part.indexOf("EXISTS") + 10, part.length() - 1);
+				newDisjunct += part.substring(0, part.indexOf("EXISTS")) + part.substring(part.indexOf("EXISTS") + 10, part.length() - 2);
 			}else if (part.contains("FORALL")){
-				newDisjunct += part.substring(0, part.indexOf("FORALL")) + part.substring(part.indexOf("FORALL") + 10, part.length() - 1);
+				newDisjunct += part.substring(0, part.indexOf("FORALL")) + part.substring(part.indexOf("FORALL") + 10, part.length() - 2);
 
 			}else{
 				newDisjunct += part;

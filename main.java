@@ -7,10 +7,14 @@ import java.util.Set;
 
 public class Main {
 	public static void main(String[] args) {
+		
+		long startTime = System.currentTimeMillis();
+		
 		String path_file = "input.txt";
 		try (Scanner scanner = new Scanner(new File(path_file))) {
-			HandlerFormula handlerFormula = new HandlerFormula();
 			while (scanner.hasNextLine()) {
+				HandlerFormula handlerFormula = new HandlerFormula();
+				
 				// Read every line of the input.txt
 				String row = scanner.nextLine();
 				if (row.isEmpty()) {
@@ -18,14 +22,17 @@ public class Main {
 				}
 				
 				// Convert into DNF
-				if (row.substring(row.length() - 20, row.length()).equals(" --- T0-TRASFORM-DNF")){
-					row = row.substring(0, row.length() - 20);
+				if (row.contains(" --- T0-TRASFORM-DNF")) {
+					row = row.replace(" --- T0-TRASFORM-DNF", "");
 					toDNF toDNF = new toDNF();
 					row = toDNF.transformIntoDNF(row);
 				}
 				
 				handlerFormula.splitDisjuncts(row);
 				for (int j = 0; j < handlerFormula.arrayOfDisjuncts.size(); j++){ // Iterate over disjuncts
+					handlerFormula.getArrayOfEqualities().clear();
+					handlerFormula.getArrayOfDisequalities().clear();
+					
 					String disjunct = handlerFormula.getArrayOfDisjuncts(j);
 
 					// Pre-processing symbols from other theories
@@ -63,6 +70,8 @@ public class Main {
 					utilitiesForTheories utilities = new utilitiesForTheories();
 					disjunct = utilities.preProcessAtom(disjunct);
 					handlerFormula.arrayOfDisjuncts.set(j, disjunct);
+					
+					System.out.println("DISJUNCT: " + disjunct);
 					
 					handlerFormula.splitConjuncts(disjunct);
 					handlerFormula.clearSubtermSet();
@@ -138,11 +147,14 @@ public class Main {
 					boolean result = congruenceClosure.decisionProcedure(arrayOfEqualities, arrayOfDisequalities);
 					// System.out.println("\n#####################");
 					// System.out.println("FINAL DAG:");
-					dag.printDag();
+					//dag.printDag();
 					// System.out.println("#####################");
 					
 					if (result) {
 						System.out.println("\nDISJUNCT N. " + j +  " ----> SAT");
+						long endTime = System.currentTimeMillis();
+						long duration = endTime - startTime;
+						System.out.println("Execution time: " + duration + " ms");
 						return;
 					} else {
 						System.out.println("\nTRY THE NEXT DISJUNCT...");
@@ -150,6 +162,10 @@ public class Main {
 				}
 				System.out.println("\nNO MORE DISJUNCTS TO TRY!");
 				System.out.println("\nFORMULA ----> UNSAT");
+				
+				long endTime = System.currentTimeMillis();
+				long duration = endTime - startTime;
+				System.out.println("Execution time: " + duration + " ms");
 				return;
 			}
 		} catch (FileNotFoundException e) {

@@ -1,63 +1,28 @@
-fare(g(x), fare(aaaaaaaaaaaaaaaaa,b,c), h(x)) = a & f(f(a,b),b) # a | f(f(f(f(f(a))))) = r & f(f(f(a))) = a & ratto(y) = x
-
-f(f(a,b),b) # a & f(f(f(f(f(a))))) = a
-
-f(f(f(a))) = a & g(x) & f(a) # a
-
-f(a,b) = a & f(f(a,b),b) # a
-
-f(f(f(a))) = a & f(f(f(f(f(a))))) = a & f(a) # a
-
-f(x,y) = f(y,x) & f(a,y) # f(y,a)
-
-f(g(x)) = g(f(x)) & f(g(f(y))) = x & f(y) = x & g(f(x)) # x
-
-f(f(f(a))) = f(f(a)) & f(f(f(f(a)))) = a & f(a) # a
-
-f(f(f(a))) = f(a) & f(f(a)) = a & f(a) # a
-
-car(a) = car(b) & cdr(a) = cdr(b) & !(atom(a)) & !(atom(b))
-
-car(x) = car(y) & cdr(x) = cdr(y) & !(atom(x)) & !(atom(y)) & f(x) # f(y)
-
-select(a,i) = v & select(b,j) = m & f(a) = f(b) & x # y
-
-select(store(store(a,i1,v1),i2,v2),j) = select(a,j) & select(b,j) = m & f(a) = f(b) & x # y
-
-x # y & select(store(store(a,i1,v1),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) = f(b)
-
-x # y & select(store(store(store(a,i1,v1),i3,v3),i2,v2),j) = f(x,y) & select(b,j) = m & f(a) = f(b)
-
-f(g(x)) = FORALL(x)((g(f(x)))) & EXISTS(y)(f(g(f(y)))) = x & f(y) = x & g(f(x)) # x
-
-(!(f(a))) -> ((!(g(g(G(G(x))))) -> (a + b & x)))
-
-!(f(a)) & (!(g(g(G(G(x)))))) & (a + b) + x & y
-
-f(f(a,b),b) # a & f(f(f(f(f(a))))) = r | f(d) # a & f(e) = r | f(f(a,b),b) # a
-
-[p->[f(f(f(a)))->r]]->[[p&[!f(f(f(f(f(a)))))]]|g(x)]
-
-[p->[f(f(f(a))) = a->r]] -> [[p&[!f(f(f(f(f(a)))))]]|g(x)] --- T0-TRASFORM-DNF
-
 -----------------
+i1 = j & i1 # i2 & select(a,j) = v1 & select(store(store(a,i1,v1),i2,v2),j) # select(a,j) --- UNSAT (101ms)
+select(store(a,i,e), j) = e & i # j --- SAT (98ms)
+select(store(a,i,e), j) = e & select(a,j) # e --- SAT (100ms)  
+select(store(a,i,e), j) = e & i = j & select(a,j) # e --- SAT (94ms)
+select(store(store(a,j,f),i,e), k) = g & j # k & i = j & select(a,k) # g --- UNSAT (103ms)
+i1 = j & select(a,j) = v1 & select(store(store(a,i1,v1),i2,v2), j) # select(a,j) --- SAT (90ms)
 
-i1 = j & i1 # i2 & select(a,j) = v1 & select(store(store(a,i1,v1),i2,v2),j) # select(a,j)
-select(store(a,i,e), j) = e & i # j
-select(store(a,i,e), j) = e & select(a,j) ! e
-select(store(a,i,e), j) = e & i = j & select(a,j) ! e
-select(store(store(a,j,f),i,e), k) = g & j # k & i = j & select(a,k) ! g
-i1 = j & select(a,j) = v1 & select(store(store(a,i1,v1),i2,v2), j) # select(a,j)
-f(a,b) = a & f(f(a,b),b) ! a
-f(f(f(a))) = a & f(f(f(f(f(a))))) = a & f(a) ! a
-f(x,y) = f(y,x) & f(a,y) ! f(y,a)
-f(g(x)) = g(f(x)) & f(g(f(y))) = x & f(y) = x & g(f(x)) ! x
-f(f(f(a))) = f(f(a)) & f(f(f(f(a)))) = a & f(a) ! a
-f(f(f(a))) = f(a) & f(f(a)) = a & f(a) ! a
-p(x) & f(f(x)) = x & f(f(f(x))) = x & !p(f(x))
-car(x) = car(y) & cdr(x) = cdr(y) & f(x) ! f(y) & !atom(x) & !atom(y)
-car(x) = y & cdr(x) = z & x#cons(y,z)
-!atom(x) & car(x) = y & cdr(x) = z & x # cons(y,z)
-atom(x) & !atom(x)
-atom(x) & cons(x,y) = x
-car(cons(a,b)) = v & v = a & v = b & a # b
+f(a,b) = a & f(f(a,b),b) # a  --- UNSAT (69ms)
+f(f(f(a))) = a & f(f(f(f(f(a))))) = a & f(a) # a --- UNSAT (68ms)
+f(x,y) = f(y,x) & f(a,y) # f(y,a) --- SAT (72ms)
+f(g(x)) = g(f(x)) & f(g(f(y))) = x & f(y) = x & g(f(x)) # x --- UNSAT (80ms)
+f(f(f(a))) = f(f(a)) & f(f(f(f(a)))) = a & f(a) # a --- UNSAT (71ms)
+f(f(f(a))) = f(a) & f(f(a)) = a & f(a) # a --- SAT (71ms)
+p(x) & f(f(x)) = x & f(f(f(x))) = x & !p(f(x)) --- UNSAT (71ms) 
+!f(a) & !(g(g(G(G(x))))) & (a + b) & y --- SAT (79ms)
+f(g(x)) = FORALL(x)(g(f(x))) & x = EXISTS(y)(f(g(f(y)))) & f(y) = x & g(f(x)) # x --- SAT (74ms)
+f(a,b) = a & f(f(a,b),b) # a | f(d) # a & f(e) = r | f(f(a,b),b) # a --- SAT (78ms)
+
+car(x) = car(y) & cdr(x) = cdr(y) & f(x) # f(y) & !atom(x) & !atom(y) --- UNSAT (82ms)
+car(x) = y & cdr(x) = z & x # cons(y,z) --- SAT (73MS)
+!atom(x) & car(x) = y & cdr(x) = z & x # cons(y,z) --- UNSAT (92ms)
+atom(x) & !atom(x) --- UNSAT (71ms)
+atom(x) & cons(x,y) = x --- UNSAT (88ms)
+car(cons(a,b)) = v & v = a & v = b & a # b --- UNSAT(90ms)
+
+[a->[f(f(a))->a]]->[f(f(a))|g(a)] --- T0-TRASFORM-DNF --- SAT (78ms)
+-----------------

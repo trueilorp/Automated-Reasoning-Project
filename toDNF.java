@@ -13,7 +13,7 @@ public class toDNF {
 	public String transformIntoDNF(String formula){
 		String finalFormula = "";
 		// First do a mapping
-		formula = formula.replaceAll("\\s+", ""); // Remove balnk spaces from the string
+		formula = formula.replaceAll("\\s+", ""); // Remove blank spaces from the string
 		mapFunctionToLiteral(formula);
 		Map<Character, String> mapFL = fixMap(mapFunLit);
 		this.mapFunLit = mapFL;
@@ -23,7 +23,6 @@ public class toDNF {
 		Map<Character, String> mapED = fixMap(mapEqDiseqLit);
 		this.mapEqDiseqLit = mapED;
 		finalFormula = getFormulaFromMap(finalFormula, mapEqDiseqLit);
-		// finalFormula = mapLiteralToEqualities(finalFormula);
 		
 		finalFormula = getDNFOfLIteral(finalFormula);
 		finalFormula = reMap(finalFormula);
@@ -34,7 +33,7 @@ public class toDNF {
 	
 	public String getDNFOfLIteral(String data) {	
 		ArrayList<String> Literals = new ArrayList<>();
-		StringTokenizer mytoken = new StringTokenizer(data, " ][<>-!&|");
+		StringTokenizer mytoken = new StringTokenizer(data, "][<>-!&|");
 		while (mytoken.hasMoreTokens()) {
 			String temp = mytoken.nextToken();
 			if (!Literals.contains(temp)) {
@@ -59,12 +58,9 @@ public class toDNF {
 			}
 			Ldata.add(new Literal(Literals.get(i), tempTF));
 		}
-		// for (Literal literal : Ldata) {
-		// 	literal.printMe();
-		// }
+
 		Stack<Literal> stack = new Stack<>();
-		char[] Cdata = data.toCharArray();
-		// data = "(" + data + ")";
+
 		data = data.replace("[", " [ ");
 		data = data.replace("]", " ]");
 		data = data.replace("!", " ! ");
@@ -91,12 +87,10 @@ public class toDNF {
 				Literal func = stack.pop();
 				if (func.name.equals("!")) {
 					Literal ans = Literal.opHandler(b, null, func);
-					// ans.printMe();
 					stack.push(ans);
 				} else {
 					Literal a = stack.pop();
 					Literal ans = Literal.opHandler(a, b, func);
-					// ans.printMe();
 					stack.push(ans);
 				}
 			} else {
@@ -178,17 +172,13 @@ public class toDNF {
 				List<Character> keys = valueToKeys.get(value);
 				// Ensure that the key is unique by checking the existing keys
 				while (keys.contains(key)) {
-					// Modify the key to make it unique (e.g., append a suffix)
-					key = getUniqueKey(key);
+					key = getUniqueKey(key); // Modify the key to make it unique (e.g., append a suffix)
 				}
 				keys.add(key);
 			} else {
-				// First time we see this value, just add the key
-				valueToKeys.put(value, new ArrayList<>(Collections.singletonList(key)));
+				valueToKeys.put(value, new ArrayList<>(Collections.singletonList(key))); // First time we see this value, just add the key
 			}
-
-			// Add the modified key-value pair to uniqueMap
-			uniqueMap.put(key, value);
+			uniqueMap.put(key, value); // Add the modified key-value pair to uniqueMap
 		}
 		return sortMapByValueLengthDescending(uniqueMap);
 	}
